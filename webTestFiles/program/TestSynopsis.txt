@@ -1,0 +1,141 @@
+BELLEROFONTE
+
+TESTS SYNOPSIS AND SYNTHETIC DESCRIPTION - 22/07/2003 - ver. 0.85 ---
+________________________________________________________________
+
+Syntax of Single Tests implemented:
+----------------------------------
+
+1.	AddCookie | name of cookie | value of cookie |
+	"This is test defines a cookie to be sent to the server on every request. "
+	·	Library used: com.meterware.httpunit
+	·	Return value: void
+	·	Change for the following tests: add a session's cookie
+
+2.	CheckButtonValue | (Form name ^ Form identifier ^ Form sequential number) | button value | [click] |
+	"A form can have some buttons (also 'reset'). This test check if they are present using their value. The buttons can be clicked specifying a value in the second parameter. Button value is case insensitive."
+	·	Library used: com.meterware.httpunit
+	·	Return value: void
+	·	Change for the following tests: void
+
+3.	CheckCharacterSet | string with the character encoded set |
+	"This test get the actual Character set and compare it with the expected value. It is case insensitive."
+	·	Library used: com.meterware.httpunit
+	·	Return value: void
+	·	Change for the following tests: void
+
+4.	CheckForm | (name Form ^ identifier Form ^ sequential number Form) |
+	"This test search for a form. It returns also some webform's information: its id and its field that Bellerofonte can read."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+5.	CheckFormAction | (Form name ^ Form identifier ^ Form sequential number) | action url to check |
+	"Give a form it check if the url-action is as expected. It's case insensitive."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+6.	CheckFormContent | (Form name ^ Form identifier ^ sequential Form number) | field identifier | string to match |
+"It watch for a form that contain a field with a certain value. All parameters must be exactly as in the page analized but the string to match is case insensitive." 
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+7.	CheckFormField | (name Form ^ identifier Form ^ sequential number Form) | field name to check |
+	"This test search for a particular form's field."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+8.	CheckFormMethod | (name Form ^ identifier Form ^ sequential number Form) | method type to check|
+	"As CheckFormAction this test check if the method of a form is as expected. It's case insensitive."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+9.	CheckImage | (image's alternative text ^ image's name ^ image's URL source) | [ link url to verify ] |
+	"It search for an image using various parameters type. It is possible check also if the image is a link, on passing to this test also an exact (absolute) url."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+10.	CheckLink | (text in the link ^ identifier ^ name ^ text of image-link) | [ link url to verify ] |
+	"Search for a link. The user can optionally specify an url to verify."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+11.	CheckMailLinks | name of  link in regular expression | e-mail address to verify |
+	"This test search as CheckLink for all links that match with a particular name and then select only those that are mail link verifying that the address is as expected."
+	·	Library used: com.meterware.httpunit, org.xml.sax, java.util.regex
+	·	Return value: void
+	·	Change for the following tests: void
+
+12.	CheckTable | (first non-blank cell ^ starting prefix in the first non-blank cell ^ identifier ^ summary ^ ordinal number) |
+	"It search a table using various characteristics."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+13.	CheckTableContent | (first non-blank cell ^ starting prefix in the first non-blank cell ^ identifier ^ summary ^ ordinal number) | number of row | number of column | text value to check |
+	"When it has found a table it verify if the (textual) content of one cell is as expected (not case sensitive)."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+14.	CheckTextInPage | text to find also as regular expression |
+	"This test search for some test in the web page. It extract all text holds in links and other elements."
+	·	Library used: com.meterware.httpunit, java.util.regex, org.htmlparser
+	·	Return value: void
+	·	Change for the following tests: void
+
+15.	CheckTitle | Title to check |
+	"Check if the page has a particular title. The check isn't case sensitive"
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: void
+
+16.	FollowLinks | [baseUrl] | ("string" ^ "url" ) | String to match |
+	"This test is the only that return a vector to the program with all links that it has found in the page under certain parameters. It's possibile to specify a particular base url that hold protocol+host+path of a page to reach. Then it must have two parameters: the first is for choose how search a link (with its text or with its url). The second is the string that must matching. The string can be formed as a regular expression. FollowLinks delete double access to the same url, so, if you have two links with the same name and same url, it returns only the first of those."
+	·	Library used: com.meterware.httpunit, org.xml.sax, java.util.regex
+	·	Return value: vector of String with the url of links to follow
+	·	Change for the following tests: they have as target all links captured by this test
+
+17.	GetFrameContent | frame name |
+	"When a page has some frames, this test permit to change from one to another using their names."
+	·	Library used: com.meterware.httpunit
+	·	Return value: void
+	·	Change for the following tests: change WebResponse with the content of frame selected
+
+18.	GetHttpHeader |
+	"This test don't perform any check. It report all information hold in the header http fields."	
+	·	Library used: com.meterware.httpunit
+	·	Return value: void
+	·	Change for the following tests: void
+
+19.	ReachAll | absolute path of txt file with web pages | depth of visit | [timeout of response] |
+	"With this test it's possible to verify if all web pages listed in a textual file (one per line) are really reachables. It realize a depth first visit of the graph (in this case the web site) and store the name of pages that it meet. If there isn't enough depth or any page aren't reachable it fail and display the list of that pages. During the visit it display also all pages that it meet. To avoid that a response is waited for a long time the last parameter is the timeout in milliseconds. If it isn't specified the default value is 3000 ms. If a script exception occur during the visit it's recommended to set to NO the scripting=yes option."
+	·	Library used: com.meterware.httpunit, claudiosoft.struct.btree, 
+	·	Return value: void
+	·	Change for the following tests: void
+
+20.	SetFormContent | (Form name ^ Form identifier ^ sequential Form number) | field identifier | string to set |
+	"How CheckFormContent this method perform the same operations but when a field is found it put a value in it."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: set a value in a form field
+
+21.	SubmitForm | (Form name ^ Form identifier ^ Form sequential number) | [string with button name or identifier] |
+	"It search for a form and get its submit button. Then click it and change the actual page with the results. The user can specify a particular submit button by its name or identifier."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: change WebResponse with the result of form's submission
+
+
+22.	UploadFileWithForm | (Form name ^ Form identifier ^ Form sequential number) | field name (of type file) | absolute path+name of file to upload |
+	"To check if a form permit the upload of a file. The field name must correspond with a 'file' type. If file field is found, the path of file to upload must be absolute. To execute a real upload this test must be followed by SubmitForm."
+	·	Library used: com.meterware.httpunit, org.xml.sax
+	·	Return value: void
+	·	Change for the following tests: change a field value
+

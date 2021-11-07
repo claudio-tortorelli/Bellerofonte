@@ -1,0 +1,4 @@
+FollowLinks|string|Soft|
+FollowLinks|string|Tutor|
+FollowLinks|string|Home|
+CheckTitle||

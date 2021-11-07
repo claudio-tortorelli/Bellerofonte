@@ -1,0 +1,104 @@
+\chapter{Applicazioni di rete e Web Service}
+Prima di passare al web testing viene affrontata in questo capitolo una breve descrizione delle applicazioni di rete, della loro struttura e delle loro principali caratteristiche. Il software pensato per le reti, ed in particolare per il Web, è basato su paradigmi particolari che si distaccano dal contesto del software tradizionale. Conoscere queste differenze aiuta a comprendere dove e come il web testing si specializza rispetto al software testing.
+
+\section{Il paradigma Client/Server}
+Il paradigma client/server, nella maggioranza delle applicazioni di rete, definisce le modalità di scambio delle informazioni tra soggetti distinti, permettendo di fatto la realizzazione dei servizi. 
+
+Internet ed in generale le reti costituiscono soltanto un'infrastruttura che permette di comunicare. Allo stesso modo l'hardware di rete ed i relativi protocolli non sono altro che mezzi, i quali non prendono nessuna iniziativa nel dare inizio ad una nuova comunicazione. Sono invece le applicazioni i soggetti che, ad un alto livello di astrazione, sanno quando, come e con chi iniziare una conversazione.
+
+Un'importante differenza tra una normale telefonata ed una comunicazione in rete è che nella seconda le applicazioni non hanno una diretta percezione della controparte. Esse devono appoggiarsi a determinati protocolli che le informino quando arriva un messaggio e da parte di chi, se è della forma attesa oppure se è stato ricevuto. I soggetti che dialogano, per evitare confusione, sono costretti ad osservare una rigida organizzazione delle informazioni scambiate, assumendo in modo coordinato un ruolo attivo o uno passivo nella conversazione.
+
+Nel paradigma client/server questi soggetti hanno un ruolo più definito: l'applicazione che prende l'iniziativa del contatto viene chiamata \emph{client}\index{Client}, mentre quella che lo attende è il \emph{server}\index{Server}. Non bisogna fraintendere i significati dei termini client e server: spesso nel gergo informatico si indicano impropriamente con gli stessi nomi le macchine sulle quali tali applicazioni sono eseguite. In realtà su un singolo computer adibito a ``server'"' possono operare più applicazioni server contemporaneamente, per cui è consigliato associare a tali macchine dedicate il nome di ``Server-class computer'"' e ``Client-class computer'"'.
+In generale un client
+\begin{itemize}
+	\item è un generico programma applicativo, utilizzabile per computazioni locali, che diventa client quando è richiesta una comunicazione remota;
+	\item è invocato da un utente e la sua durata non coincide necessariamente con la vita del sistema nel quale risiede;	
+	\item dispone di un'interfaccia utente;
+	\item può contattare più server per volta.
+\end{itemize}
+Un server invece
+\begin{itemize}
+	\item è un programma specializzato nel fornire un certo servizio;
+	\item può gestire più client contemporaneamente;
+	\item vive durante ogni fase della vita del sistema sul quale risiede;
+	\item richiede hardware e sistemi operativi appropriati;
+	\item generalmente non dispone di un'interfaccia utente.
+\end{itemize}
+Il modello client/server impone l'asimmetria nella comunicazione, collocando le applicazioni su un piano non paritetico (al contrario  di quanto accade nel modello \emph{peer-to-peer}). La conversazione può svolgersi sia a senso unico sia in entrambe le direzioni. Ad ogni richiesta del client seguono una o più risposte del server e solo in alcuni casi il server risponde con un output continuo (ad esempio nel caso di uno stream video). 
+
+Ma come fanno il client ed il server a scambiarsi i dati? E come riescono a contattarsi? Per risolvere simili questioni si fa affidamento sui vari protocolli che agiscono a livelli di astrazione diversi. Nell'ambito Web una delle coppie di protocolli più usata è \emph{TCP/IP}:\index{TCP} il primo (Transmission Control Protocol, protocollo di trasporto) permette di stabilire un canale di comunicazione tra un'applicazione ed un'altra; il secondo (Internet Protocol, protocollo di collegamento), \index{IP}ad un livello più basso, consente di indirizzare e spedire le informazioni. Tramite questi protocolli è possibile per il client specificare quale servizio richiedere presso un dato server e per il server rispondere in modo diretto al client richiedente. Senza scendere in maggiori dettagli si può schematizzare il dialogo tra client e server come segue:
+\begin{enumerate}
+	\item si assegna ad ogni servizio offerto un identificatore univoco;
+	\item un server viene avviato e si registra presso il sistema rendendosi disponibile a soddisfare un servizio con un determinato identificatore;
+	\item il server resta in attesa di chiamate;
+	\item il client chiede al proprio software di protocollo quali sono gli identificatori di servizio presso una data macchina dall'indirizzo noto;
+	\item ottenuto l'identificatore del servizio voluto, il client apre un canale di comunicazione con il server resosi disponibile a soddisfarlo;
+	\item all'arrivo della richiesta il server sospende l'ascolto di altre chiamate (se è sincrono) e comincia ad interagire col singolo client; oppure può gestire concorrentemente molteplici chiamate (se è asincrono) generando altrettanti sottoprocessi;
+	\item terminata la comunicazione, il server torna in attesa mentre il client chiude il canale di comunicazione precedentemente aperto.
+\end{enumerate}
+A seconda che la funzione computazionale sia prevalentemente a carico dell'una o dell'altra parte si parla di \emph{fat client} o \emph{fat server}\index{Fat client}\index{Fat server}. Quella dello sbilanciamento computazionale è una delle caratteristiche da valutare con maggior attenzione: attualmente, vista la notevole potenza di calcolo raggiunta dai singoli pc e l'aumento vertiginoso di connessioni ad Internet, la tendenza è quella del fat client, così da evitare, quando possibile, un superlavoro ai server. La funzionalità ``lato-server'"' resta indispensabile per certe operazioni, quali, ad esempio, l'accesso a \emph{database} centralizzati. Un tipo più sofisticato di server è infine quello \emph{multi-livello},\index{Sever multi-livello} il quale, per soddisfare un certo servizio, è in grado di collaborare con altri server.
+
+\section{Il Web}
+Tra le varie applicazioni che hanno fatto la fortuna di Internet troviamo l'FTP (File Transfer Protocol), l'e-mail, il Network Video, Telnet, ma soprattutto il WWW (World Wide Web). Quest'ultima applicazione di rete, sviluppatasi nei primi anni '90, ha avuto un tale successo presso il grande pubblico da divenire sinonimo di Internet. La stragrande maggioranza delle applicazioni che oggi si trovano su Internet è pensata per il Web. In realtà WWW può essere visto come un insieme di client e server che dialogano usando il protocollo standard \emph{HTTP} (Hypertext Transfer Protocol)\index{HTTP}, il quale permette di trattare in modo uniforme quasi tutte le componenti raggiungibili tramite Internet. Le applicazioni progettate per il Web devono necessariamente comprendere questo protocollo oltre al linguaggio utilizzato per rappresentare le risorse sotto forma di ipertesto: \emph{HTML}\index{HTML} (Hypertext Markup Language). 
+
+L'accesso al Web avviene tramite dei particolari client chiamati \emph{browser web}\index{Browser}. Essendo solitamente completi di interfaccia grafica, i browser sono relativamente semplici da usare e per questo l'accesso alle risorse di rete tramite Web è divenuto possibile anche ad utenti inesperti. I browser moderni includono anche molti \emph{plug-in}, moduli integrati capaci di rendere il browser adatto ad operazioni più complesse della semplice lettura di una pagina HTML: transazioni sicure, esecuzioni di \emph{script} e \emph{applet} Java, interpretazione di particolari formati multimediali sono solo alcuni esempi.
+
+Le tipologie di server dedicate al Web sono più numerose, benché spesso non altrettanto distinte: i più importanti sono sicuramente i \emph{web server} (contenenti le pagine HTML)\index{Web server}; poi vengono i \emph{database server} (che fungono da deposito dati) e gli \emph{application server} (che estendono i servizi offerti tramite linguaggi particolari), oltre ai più specifici \emph{proxy server}, \emph{search server} ed \emph{e-commerce server}.
+
+Ogni risorsa accessibile nel Web è dotata di un \emph{URL} (Universal Resource Locator) \index{URL}univoco, al quale viene di solito associato un nome simbolico. L'associazione risorsa-URL-nome simbolico rappresenta un \emph{link}.
+
+Il Web \index{Web}è sostanzialmente un'applicazione di Internet capace di sommare varie funzionalità di rete e di collegare tra loro con la stessa facilità elementi multimediali, testi, database e così via. Tutta una gamma di \emph{siti web}, dall'aspetto e dalle funzionalità più disparate, è oggi disponibile sul Web. Benché le applicazioni pensate per il Web non costituiscano la totalità del software di rete, ne rappresentano sicuramente la porzione più ampia ed appariscente. Praticamente ogni azienda ha un proprio sito web e moltissime sono ormai quelle che sul Web fondano i propri affari (le stesse che hanno dato vita al fenomeno ``New Economy'"') fornendo particolari servizi. D'altro canto anche il software tradizionale si trova spesso a dover interagire col Web (per scaricare aggiornamenti, inviare e-mail, compilare moduli, \ldots). 
+
+Nel capitolo 1 sono state illustrate le ragioni del software testing. Viste le problematiche intrinseche delle reti (in questa tesi non affrontate) e la varietà di aspetti inediti presenti nel software progettato per il Web, il testing diviene ancor più necessario.
+
+\section{I servizi di rete}
+In che consistono i famosi servizi che i server possono soddisfare? 
+Nell'immaginario informatico comune una rete (nell'accezione più generale) è un ``deposito'"' in cui vengono messe a disposizione risorse ed informazioni di vario tipo. In Internet, la rete per eccellenza, si può trovare, tra le altre cose, il sito web di un comune, il servizio prenotazioni di un'agenzia di viaggi, l'e-banking di un istituto di credito, l'elenco on-line dei libri di un editore, ma anche una casella di posta elettronica o una chat. In generale, ogni volta che si raggiunge una risorsa tramite una rete, si accede ad un \emph{servizio} che essa offre.\index{Servizio di rete} Un servizio banale è quello di mostrare il contenuto di una pagina HTML; uno più complicato può essere una \emph{chiamata a procedura remota} (Remote Procedure Call). Dietro ad ogni servizio stanno uno o più server, una o più applicazioni di rete, protocolli di comunicazione adeguati e hardware dedicato.
+
+I servizi di rete sono già moltissimi ma ne vengono creati sempre di nuovi per sfruttare le nuove tecnologie e far fronte alle esigenze degli utenti. Alcuni servizi sono destinati alle reti interne di aziende ed organizzazioni, altri pensati per essere accessibili da qualsiasi pc dotato di \emph{modem}. Si ha dunque un proliferare di applicazioni di rete con funzionalità, prestazioni, struttura, finalità e requisiti di compatibilità molto diversi tra loro. Se da una parte questo è positivo perché offre all'utente una maggiore libertà di scelta, dall'altra obbliga gli sviluppatori a considerare tutta una gamma di problematiche assente nel contesto del normale software centralizzato. L'interoperabilità delle componenti, la scelta dei linguaggi di sviluppo, la coordinazione e la collaborazione delle applicazioni, i limiti stessi delle reti (raggiungibilità, latenza e così via) complicano ogni fase dello sviluppo di un servizio di rete, ampliando la schiera dei possibili bug e dei relativi test da effettuare. 
+
+In particolare è oggi molto sentito il problema delle incompatibilità hardware e software. Da quando Internet ha permesso di collegare insieme decine di milioni di utenti, poter reperire un particolare servizio ed utilizzarlo a prescindere dalle piattaforme hardware e software è una delle principali sfide degli informatici moderni. Il testing stesso finisce per incontrare un grosso limite nelle incompatibilità che costringono le applicazioni e le risorse di rete in un ambiente chiuso nei riguardi di piattaforme diverse. Le spese di cui si devono far carico le aziende produttrici di software per superare queste barriere e controllare poi che effettivamente siano state superate, sono molto alte. Qualcuno ha descritto metaforicamente Internet come un gigantesco \emph{arcipelago} di isole-servizi, ognuna con un proprio dialetto. Non è possibile ipotizzare in questa situazione una \emph{somma di servizi} su larga scala perché non avrebbero capacità di integrarsi agevolmente e vicendevolmente. Evidentemente questa non è una situazione favorevole allo sviluppo di determinati settori, come ad esempio quello dell'\emph{e-business}. Per questo le grosse industrie dell'\emph{Information Technology} si stanno accordando (e combattendo) per definire protocolli, linguaggi e piattaforme comuni.
+
+\'E da questo sforzo che nasce il concetto di web service come estensione del servizio tradizionale.
+
+\section{I web service}
+Un \emph{web service}\index{Web service} può essere definito come
+\emph{un'interfaccia che attraverso una rete descrive una collezione di operazioni accessibili mediante messaggistica XML.}
+\index{Web service}
+
+La caratteristica del web service rispetto al servizio web tradizionale è l'interoperabilità e l'indipendenza dalla piattaforma su cui il servizio risiede ed è stato codificato. Una rete di grandi dimensioni è infatti tipicamente formata da infrastrutture hardware e software spesso eterogenee. Con l'uso di strumenti quali XML, SOAP, UDDI, WSDL, si scavalcano le incompatibilità, stabilendo uno standard comune di messaggistica ad alto livello per trasferire informazioni provenienti da fonti completamente diverse. Così facendo si mettono in comune non soltanto i dati ma anche molte funzionalità dei servizi, rendendole fruibili da qualunque piattaforma che ne faccia idonea richiesta. \'E una trovata non originale nel mondo dell'informatica, ma rimane fondamentalmente valida se si vuol realizzare un sistema di \emph{computazione distribuita} su grande scala (tramite Internet). Si pensi alla possibilità di creare dei macro-servizi da combinazioni di servizi semplici sparsi nella rete. O alla facilità con cui potrebbe essere scritta un'applicazione web se si sapesse che tutto ciò che viene ricevuto ha una codifica indipendente dalla fonte. Tutto questo si ottiene dotando il ``vecchio servizio'"' di un'efficace astrazione. Con i web service si implementa di fatto \emph{un'astrazione di servizio}, trasparente ai mezzi col quale il servizio è richiesto e svolto. 
+
+\subsection{Architettura dei web service}
+I web service possono essere visti come dei \emph{framework} di messaggi. Ad un web service è richiesto semplicemente di saper ricevere e spedire messaggi in accordo con i protocolli di rete. Nella maggior parte dei casi il loro funzionamento si riassume con uno schema classico:
+\begin{itemize}
+	\item il server riceve dal client un messaggio interpretabile, al quale segue l'avvio di una o più applicazioni in remoto;
+	\item terminata l'elaborazione viene inviato in risposta al client un messaggio con il risultato.
+\end{itemize}
+La novità sta nell'utilizzo di meccanismi standardizzati di impacchettamento dei dati, abbinati ad XML (eXtensible Markup Language),\index{XML} un linguaggio di codifica delle informazioni universalmente riconosciuto e sempre più utilizzato. 
+
+A livello logico un web service può essere scomposto in due componenti principali:
+\begin{itemize}
+	\item un \emph{service listener}, in grado di comprendere i protocolli di trasporto ed impacchettamento. Esso rimane in attesa di messaggi in arrivo;
+	\item un \emph{service proxy} in grado di tradurre le richieste in effettive chiamate all'applicazione retrostante. 
+\end{itemize}
+Un'altra caratteristica dei web service è l'\emph{integrazione dinamica}\index{Integrazione dinamica} con la piattaforma sulla quale risiede l'applicazione server. Si vuole infatti garantire l'indipendenza da tale piattaforma ed al tempo stesso fornire un meccanismo che permetta di orientarsi nella ricerca di un servizio, con la libertà di variare i parametri dei servizi offerti. Questa configurazione ``sul momento'"' è realizzata nella \emph{web service architecture} da vari soggetti: \index{Web service architecture}
+\begin{enumerate}
+	\item un \emph{service provider} pubblica un elenco dei servizi che può offrire in un certo momento;
+	\item questo elenco è reso noto ad un \emph{service registry} (fase di pubblicazione del servizio);
+	\item un \emph{service requestor} o \emph{consumer} (essere umano o altra applicazione web) si rivolge al service registry per trovare un servizio a lui utile e questo gli riporta l'indirizzo del service provider in grado di fornirglielo;
+	\item ottenuto tale indirizzo il service requestor tenta di accedere al servizio vero e proprio presso il service provider (fase di \emph{bind});
+	\item conclusa positivamente la fase di bind lo scambio dei dati avviene direttamente tra il service requestor ed il service provider.
+\end{enumerate}
+Questa architettura permette di variare il numero, il tipo e l'indirizzo di certi servizi offerti anche a run-time, dinamicamente e senza coinvolgere necessariamente chi richiede il servizio.
+
+%\begin{figure}[h]
+%	\begin{center}		%\includegraphics[width=1.00\textwidth]{D:/Documenti/TeX/tesi/immagini/schemaSe2.eps}
+%	\end{center}
+%	\caption{Schema di architettura dei web services}
+%	\label{fig:schemaSe}
+%\end{figure}
+	
+Alternativo e complementare al modello di architettura analizzato c'è il \emph{modello Peer},\index{Modello Peer} che ha una configurazione più flessibile in quanto la distinzione tra service provider, registry e consumer non è rigida. Ogni peer (punto o nodo) della rete può costituire un'entità ``polimorfa'"' che assume a seconda delle necessità, dei servizi richiesti e del soggetto che li richiede, uno dei ruoli necessari alla realizzazione del servizio. 
+
+\section{Conclusioni}
+In questo capitolo è stata data una veloce descrizione dei meccanismi che stanno dietro al software a cui si applicheranno le tecniche di web testing illustrate nel prossimo capitolo. Chi effettua web testing è però tenuto ad approfondire nei dettagli la propria conoscenza delle reti, delle loro qualità e problematiche. \'E fondamentale aver presenti i limiti delle applicazioni web e le loro diversità rispetto al software tradizionale perché sottovalutare o ignorare queste differenze può portare a test formalmente corretti ed efficaci nella teoria ma insufficienti nella realtà. 

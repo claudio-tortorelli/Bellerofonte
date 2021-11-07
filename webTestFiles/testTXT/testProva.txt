@@ -1,0 +1,1 @@
+ReachAll|c:\files.txt|1|1000|

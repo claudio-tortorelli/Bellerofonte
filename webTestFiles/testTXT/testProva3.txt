@@ -1,0 +1,3 @@
+SetFormContent|0|uname|u1|
+SetFormContent|0|pass|u1|
+SubmitForm|0||

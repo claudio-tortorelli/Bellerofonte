@@ -1,0 +1,135 @@
+%definizione generale del documento
+\documentclass[a4paper,12pt,notitlepage,italian]{report}
+
+%pacchetti importati
+\usepackage[italian]{babel}
+\usepackage{graphics}
+\usepackage[dvips]{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{verbatim}
+\usepackage{makeidx}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage[monochrome]{color}
+\usepackage{syntonly}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+%pacchetto di personale
+\usepackage{tortorelli}
+
+% stile di pagina(intestazione, posizione numeri...)
+%\pagestyle{headings}
+\pagestyle{fancy} %= interstazione piu' bella, numeri in fondo
+
+%autore
+%\author{Claudio Tortorelli}
+
+%costruttore di indice
+\makeindex
+
+%inizio documento
+\begin{document}
+
+%elenco parole da sillabare
+\hyphenation{}
+
+%definizione del titolo
+%\title{Web Testing: Teoria ed Applicazioni}
+
+%costruttore del titolo
+%\maketitle
+
+%\begin{figure}[!h]
+%\begin{center}
+%	\includegraphics[width=1.00\textwidth]{immagini/bellerofonte.eps}
+%\end{center}
+%\end{figure}
+
+%--- prima pagina stile tesi
+\title{\vspace{-2.0cm}
+\Large \bf{Universit\`a degli Studi di Firenze}\\
+\large \textmd{Facolt\`a di Scienze Matematiche, Fisiche e Naturali\\Corso di Laurea
+Triennale in Informatica}\\\vspace{1cm}
+\Huge
+\bf{Web Testing: Teoria ed Applicazioni}\vspace{1.5cm}}
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=.3\textwidth]{immagini/stemmaunifi2.eps}
+\end{center}
+\end{figure}
+\vspace{1cm} \author{\bf{Laureando}: \\ Claudio Tortorelli \vspace{2cm}
+\\\begin{tabular}{ccccccccc} \bf{Relatore:}&&&&&&&&\bf{Correlatore:}\\
+Prof. Pierluigi Crescenzi&&&&&&&&Carlo Salinari
+\end{tabular}}
+\date{\vspace{2cm}29 Settembre 2003}
+
+%costruttore del titolo
+\maketitle
+\thispagestyle{empty}
+
+%numero di versione del documento
+%\versione{bozza}
+\newpage
+
+%stemma università firenze
+\thispagestyle{empty}
+\begin{figure}[!h]
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{immagini/bellerofonte.eps}
+	\caption{Bellerofonte lotta con la Chimera}
+\end{center}
+\end{figure}
+
+\newpage
+%direttive di stile a fancyheader
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} \fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\addtolength{\headheight}{0.5pt}
+\fancypagestyle{plain}
+
+%posiziona l'indice costruito
+\tableofcontents
+\newpage
+
+%interlinea
+\linespread{1.3} %= 1.5
+
+%----------- Inizio testo
+\include{intro}
+%################################################################
+\part{Software e web testing}
+%################################################################
+\include{softwareTesting}
+%----------------------------------------------------------------
+\include{ServiziEWebService}
+%----------------------------------------------------------------
+\include{WebTesting}
+%----------------------------------------------------------------
+\include{MercatoWebTesting}%################################################################
+\part{Web testing con Bellerofonte}
+%################################################################
+\include{Bellerofonte}
+%----------------------------------------------------------------
+\include{ManualeUso}
+%################################################################
+\part{La piattaforma Orbilio: sviluppo e testing}
+%################################################################
+\include{Orbilio}
+%----------------------------------------------------------------
+\include{OrbVSBel}
+%################################################################
+%\include{glossario}%################################################################
+\include{bibliografia}
+%################################################################
+% indice analitico
+\addcontentsline{toc}{chapter}{Indice Analitico}
+\chaptermark{}
+\printindex
+
+%---------- fine testo
+\end{document}

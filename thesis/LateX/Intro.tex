@@ -1,0 +1,41 @@
+\addcontentsline{toc}{chapter}{Introduzione}
+\chaptermark{}
+\chapter*{Introduzione}
+\thispagestyle{plain}
+Una delle parti sicuramente più insidiose e dispendiose del processo di sviluppo del software è sicuramente quella del \textbf{testing}. Si tratta però di un passaggio inevitabile nella produzione di software di qualità. Che si usi un modello di sviluppo \emph{a cascata} piuttosto che uno \emph{a spirale} il testing offre comunque occasione di verifica della bontà dei risultati raggiunti, in relazione ai requisiti richiesti. 
+
+Con il termine ``software testing'"' si fa riferimento ad un'ampia gamma di operazioni volte a dimostrare la validità funzionale e logica del software prodotto. Anche quando non è possibile dimostrare in modo generale l'idoneità di un certo asserto, è utile trovare dei test empirici che mettano in evidenza eventuali carenze del software, in un dominio più ristretto ma specifico di casi. 
+
+Ma cosa si intende per ``utilità'"' del testing? Cosa dovrebbe spingere non solo la grande ``software house'"' ma anche il ``laboratorio artigianale'"' ad addentrarsi nella faticosa e spesso lunga attività di ricerca di errori? L'attività di testing è da intraprendere per ogni categoria di software?
+
+Nel corso di questa tesi si tenterà di rispondere a queste domande sia con constatazioni teoriche sia con esempi pratici. 
+
+\'E noto che, per quanto sia esperto ogni singolo sviluppatore di un gruppo di lavoro, il ``\emph{bug} software'"' si verifica puntualmente, per fattori intrinseci dell'attività di programmazione. Ad esempio, i tre stadi di analisi, progetto e sviluppo non si svolgono quasi mai nel modo lineare e consecutivo che si vorrebbe: l'attività dei singoli sviluppatori tende a sovrapporsi, generando incomprensioni e fasi di sviluppo ``caotico'"', con conseguente alta probabilità di errori logici e semantici.
+
+Un altro aspetto che può influenzare negativamente la qualità di un prodotto è la scarsa conoscenza del contesto nel quale il software opererà, delle attività e delle procedure che dovrà supportare ed integrare. Esiste software destinato ad utenti generici e software destinato a particolari classi di utenti, con esigenze che possono essere del tutto estranee alla cultura del progettista o dello sviluppatore. Vi sono varie tecniche per colmare queste lacune e fornire un prodotto ottimizzato per una particolare funzione. Ciononostante è facile trascurare qualche particolare ed andare incontro a malfunzionamenti.
+\spazioVer
+
+L'attività di controllo e refactoring di un software è spesso scarsamente presa in considerazione ed è condotta con metodi non idonei e poco efficienti. Eppure in molti casi il successo di un software può essere determinato proprio dalla cura dei ``dettagli'"'. Aspetti apparentemente secondari, quali la manutenibilità, la robustezza, l'affidabilità e l'usabilità, hanno oneri alti sia in termini monetari che di tempo (e si sa che spesso un progetto ha carenza di entrambe queste risorse). Per una buona attività di verifica sono necessari  appositi gruppi di lavoro (interni ed esterni), lo sviluppo o l'acquisto di software specifico e la continua ricerca di nuove tecnologie. Perciò è più facile e meno dispendioso puntare ai soli requisiti primari di un software, ovvero l'efficienza e la correttezza. Questo approccio ``al risparmio'"' porta vantaggi economici e temporali nel breve periodo, mentre è dimostrato l'inverso per il lungo periodo. Infatti, in progetti di lunga durata, un'attività sistematica ed ordinata di testing porta ad ottenere software molto più valido, usabile, facilmente riutilizzabile e manutenibile. Qualità che fanno la differenza in un mercato ormai sempre più saturo e competitivo.
+
+Per ottenere la correttezza formale e semantica del proprio software vi sono molte attività da intraprendere, ognuna rivolta ad un particolare aspetto del programma. Non sempre è necessario (anzi, è praticamente impossibile) che un software rispetti tutti i canoni delle ``buone qualità'"', ma almeno sulle funzionalità chiave occorre fornire adeguate garanzie. Per farlo è possibile affidarsi a \emph{versioni beta}, simulazioni, \emph{usability tests}, euristiche, analisi white e black box oppure ad un'oculata combinazione di queste metodologie.
+\spazioVer
+
+Ciò che vale per il software ``tradizionale'"' è valido anche per quello di rete, che però si porta dietro tutta una serie di problematiche aggiuntive ampiamente descritte dalla letteratura del settore. Chi progetta servizi di rete e siti web più o meno dinamici, è tenuto ad offrire un servizio sicuro, corretto ed ottimizzato. In poche righe si può affermare che un'applicazione web:
+\begin{itemize}
+	\item è spesso rivolta ad utenti dalle competenze e dagli interessi più disparati (\emph{Internet}) ma può anche essere usata da un gruppo circoscritto ed omogeneo di utenti (\emph{intranet});
+	\item può essere concepita sia per usi specifici che generici;
+	\item può includere aspetti critici e di sicurezza;
+	\item deve supportare tecnologie in continua evoluzione;
+	\item può comprendere contenuti multimediali;
+	\item è spesso in continuo aggiornamento;
+	\item è pensata per un funzionamento distribuito, che coinvolge macchine eterogenee e topograficamente distinte moltiplicando le cause di possibili malfunzionamenti.
+\end{itemize}
+
+Da questa sintetica rassegna di peculiarità emerge l'importanza di una buona attività di testing per le applicazioni web. Attività che in questo contesto è chiamata \textbf{web testing}. 
+
+Nei capitoli che seguono sarà fatta un'analisi più dettagliata del mondo del software testing tradizionale. Si passerà poi ad esaminare brevemente in cosa consiste il software di rete con un accenno ai più specifici web service. Saranno quindi osservate più da vicino le categorie di web testing e, in conclusione della prima parte, sarà presentato qualche esempio di software %open source?% 
+per web testing attualmente sul mercato.
+
+Nella seconda parte si descriverà Bellerofonte, il software di web testing realizzato nell'ambito di questa tesi, mentre nella terza ed ultima si applicherà il suddetto software ad un caso di studio concreto: la piattaforma per e-learning \textbf{Orbilio}. 
+
+

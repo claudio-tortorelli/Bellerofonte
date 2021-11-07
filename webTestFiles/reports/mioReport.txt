@@ -1,0 +1,10 @@
+-----------------------------------------------------
+REPORT OF TEST: testProva.txt - 6-lug-2003 23.40.14
+-----------------------------------------------------
+ 
+1.0] TEST: "ReachAll" | Url: http://127.0.0.1/index.php
+   Result expected: "Input file name: c:\files.txt"
+   # Seconds elapsed to accomplish the test: 0.280
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 

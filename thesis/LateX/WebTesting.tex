@@ -1,0 +1,210 @@
+\chapter{Il web testing}
+In questo capitolo saranno analizzati in modo più dettagliato i punti critici delle applicazioni web e di conseguenza dove si rende necessario il web testing. Non verranno proposti dei test specifici ma ci si limiterà ad evidenziare il loro obiettivo finale. Questo perché ogni team di sviluppo o di verifica ha a disposizione vari strumenti e, per effettuare test concreti, può combinarli con altrettante metodologie. Salendo invece ad un livello appena superiore è conveniente focalizzare l'attenzione sugli obiettivi del web testing, in particolare su come scomporre qualitativamente in categorie questa attività al fine di raggiungere più facilmente gli scopi preposti.
+
+\section{Cosa si deve testare}
+Dal software testing deriva (storicamente e metodologicamente) il web testing, per cui la maggior parte delle conoscenze accumulate per il primo è stata utile per il secondo. La diversità di contesto tra i due tipi di testing implica però differenti modalità di applicazione e valutazione. La verifica dei link, ad esempio, è un'operazione che non viene effettuata di norma per il software tradizionale. In ogni caso,  anche quando gli aspetti da testare sono presenti sia nel web che nel software testing, è difficile che la semantica rimanga la stessa: uno script può essere visto come un metodo di un oggetto, ma quando si testa nel suo contesto molte somiglianze spariscono. 
+
+Un software che lavora localmente non viene spesso a contatto con problematiche quali lunghi tempi di download, latenze di rete, traffico ed indirizzamento delle informazioni, utilizzo condiviso da parte di vari utenti (anche numerosi). Altri aspetti come la sicurezza o l'autenticazione degli utenti hanno poi un peso minore. Persino l'interfaccia grafica, che per un software tradizionale è definita una volta per tutte in fase di sviluppo, nelle applicazioni di rete può essere soggetta ad interpretazioni diverse da parte dei browser che la visualizzano.
+
+Le caratteristiche tecniche non sono d'altra parte le uniche a fare la differenza. Nel momento in cui un sito web viene messo in rete, lo si espone all'utilizzo di un'utenza composita e variegata, di cultura, conoscenze informatiche ed interessi anche molto diversi.
+Questo avviene indipendentemente dalle reali intenzioni ed ambizioni  degli sviluppatori. In altre parole l'usabilità, già fattore critico nel software testing, è ancora più importante nelle applicazioni web che interagiscono direttamente con utenti spesso non definiti in fase di progetto. 
+
+Per rimarcare ulteriormente quanto il differente contesto influisca sui test destinati ad un'applicazione web, si ricordi che quasi tutte queste applicazioni hanno la necessità di un aggiornamento continuo (a volte automatico) dei propri contenuti o della propria interfaccia. Quindi, mentre nel software ``statico'"' tutto (a parte il valore dei dati da immettere) è definito in fase di sviluppo, nelle applicazioni web si ha molta più ``dinamicità'"', a volte in funzione dell'utente stesso. Tutto questo fa sorgere numerosi problemi di coerenza, rendendo necessari altrettanti test.
+
+La qualità di un'applicazione web può dipendere da un dato insieme di aspetti, tra cui:
+\begin{itemize}
+	\item le interfacce utente;
+	\item le funzionalità;
+	\item l'accesso ai database;
+	\item la facilità e la correttezza del processo di installazione/disinstallazione;
+	\item la facilità di configurazione e la compatibilità;
+	\item la sicurezza e l'autenticazione;
+	\item le performance (con l'esecuzione in stato di stress).
+\end{itemize}
+Si noti che ognuno degli aspetti elencati (che non saranno necessariamente tutti presenti) è facilmente riscontrabile dagli utenti, dagli operatori o dall'amministratore. Per questo un bug che interessi una di queste caratteristiche può incidere notevolmente sull'affidabilità e l'usabilità dell'applicazione. 
+
+Oltre ai test riguardanti le peculiarità evidenziate, in fase di sviluppo rimangono da verificare alcune qualità specifiche meno appariscenti: l'architettura dell'applicazione, le modalità di dialogo tra le componenti, l'efficienza degli algoritmi ed in generale tutto quello che si addice ad un testing white box.
+
+\section{Una panoramica generale}
+I \emph{test types}\index{Test types} sono categorie di test pensate per catalogare determinate classi di errori.  La suddivisione dei test in tipologie consente di individuare più agevolmente le aree logiche del software ed i test destinati a verificarle in determinate fasi dello sviluppo. I test sottoelencati sono comuni sia al software che al web test. Nella prossima sezione saranno riprese in esame dal più specifico punto di vista del Web.
+
+\subsection{Acceptance testing}
+\begin{itemize}
+	\item \emph{Development acceptance test}: consiste in una serie di test effettuati in fase di sviluppo con l'obiettivo di assicurare un livello minimo di qualità. A sua volta si suddivide in 	
+\begin{enumerate}
+	\item \emph{Release acceptance test (RAT)}: test effettuato per ogni \emph{release} per verificare che sia sufficientemente stabile prima di effettuare ulteriori test. Normalmente consiste in controlli sui valori di input e di output.
+	\item \emph{Functional acceptance simple test (FAST)}: è il primo test funzionale effettuato su ogni release in fase di sviluppo, volto a controllare la presenza delle caratteristiche chiave nell'applicazione. Superare anche questo tipo di test è una condizione necessaria per poter successivamente applicare test più complessi.
+\end{enumerate}
+
+\item \emph{Deployment acceptance test}: prevede l'installazione e la configurazione dell'applicazione in quello che sarà il reale ambiente di lavoro (o una sua versione approssimata). Spesso infatti, fino ad un certo grado di sviluppo, il software viene testato in ambienti di lavoro estranei a quello di destinazione. Collocare il programma nel contesto giusto è essenziale prima di procedere con test di livello superiore.
+\end{itemize}
+
+\subsection{Feature-level testing}
+Accertata una correttezza di base del software si procede col verificare, stavolta in modo approfondito, le sue caratteristiche:
+\begin{itemize}
+	\item \emph{Task-oriented functional test (TOFT)}: i TOFT consistono in un'analisi positiva dei compiti che l'applicazione dovrebbe saper svolgere, sulla base di quanto stabilito nei documenti di analisi e progetto.
+	\item \emph{Forced-error test (FET)}: a differenza dei TOFT, i FET agiscono negativamente, costringendo l'applicazione a lavorare in condizioni di errore. Si sfruttano questi test per generare contemporaneamente una lista di errori possibili e verificare come il programma li gestisce.
+	\item \emph{Boundary test}: controllano come il programma risponde nei casi in cui l'input assume valori estremi o critici. 
+	\item \emph{System-level test}: sotto questo nome vanno tutti i test volti a verificare come l'applicazione interagisce col sistema sottostante.
+	\item \emph{Real-world user-level test}: vengono eseguite le operazioni che si suppone siano più frequenti da parte degli utenti.
+	\item \emph{Load/Volume test}: questi test riguardano lo studio di come il programma gestisce grandi quantità di dati e computazioni eccessive (non necessariamente estreme).
+	\item \emph{Stress test}: in questo caso si forza il software a lavorare in condizioni di risorse limitate (memoria, spazio su disco, larghezza di banda sulla rete e così via). L'obiettivo è individuare il limite oltre il quale le funzionalità non sono più garantite.
+	\item \emph{Performance test}: l'obiettivo di questi test è scoprire la strategia giusta per mantenere le funzionalità del programma sopra un certo livello di efficienza nella maggior parte dei casi.
+	\item \emph{Regression test}: sono test usati per confermare che i vecchi bug siano stati corretti adeguatamente, senza danneggiare altre funzionalità. Sono di solito ripetuti ad intervalli predefiniti.
+	\item \emph{Compatibility and configuration test}: in questi test si vanno a controllare le funzionalità del software nei riguardi di particolari componenti esterne (periferiche, sistemi operativi, \ldots). Una strategia spesso adottata è quella che prevede l'esecuzione di un sottoinsieme di FAST o TOFT in vari ambienti di lavoro.
+	\item \emph{Documentation/On-line help test}: anche come il programma viene in aiuto dell'utente è un aspetto da testare. Viene controllata dunque l'accuratezza della documentazione, insieme all'usabilità ed alla funzionalità degli help in linea.
+	\item \emph{Install/Uninstall test}: testare che l'installer metta l'applicazione in condizioni di funzionare correttamente e l'uninstaller la rimuova dal sistema, è una questione di ``bon-ton'"' informatico. L'utente non deve preoccuparsi di questi ``dettagli'"' più di tanto: esso è interessato solo all'uso del software. Per le applicazioni web si può avere un'installazione/disinstallazione dal lato client, dal lato server o da entrambi i lati.
+	\item \emph{User interface test}: la facilità  d'uso dell'interfaccia utente è un altro punto da testare. Con questi test si mettono alla prova l'usabilità, l'aspetto grafico, la navigabilità, l'accessibilità ed il \emph{feedback} dato dell'interfaccia.
+	\item \emph{Security test}: per molte applicazioni la sicurezza è un aspetto cruciale. Con questi test si valuta se la politica adottata per rendere il software sicuro è sufficiente rispetto al livello di protezione richiesto.
+	\item \emph{Unit test}: rientrano in questa categoria di test tutti quelli volti a valutare la correttezza delle singole unit di codice prima che vengano integrate nel software. \'E un tipo di testing effettuato ``in privato'"' dai singoli programmatori.
+\end{itemize}
+ 
+\section{Analisi di alcune categorie di web testing}
+
+Segue ora la presentazione di alcune tra le principali classi di web testing attraverso le problematiche specifiche delle applicazioni web.  In particolare verranno trattate quelle che più direttamente interessano il tool di web testing realizzato per la tesi (Bellerofonte) e l'applicazione web alla quale sarà applicato (Orbilio). 
+Per maggiori dettagli si rimanda ai riferimenti bibliografici \cite{2.2}.
+
+\subsection{User Interface test}
+Testare un'interfaccia vuol dire verificare disegno ed implementazione delle sue componenti. Il testing delle UI (User Interface) è condotto sia con test appositi sia nel corso di altri test (ad esempio i TOFT o i test di usabilità).
+\begin{itemize}
+	\item Per quanto riguarda il \textbf{disegno di interfacce}, le migliori valutazioni provengono dagli utenti finali. Naturalmente esistono anche delle autorevoli linee guida da seguire, basate su euristiche e considerazioni derivate dalla psicologia cognitiva. \'E però sempre utile coinvolgere campioni di utenza per avere impressioni dirette sull'usabilità, la navigabilità, la chiarezza e l'accessibilità dell'UI. Una buona interfaccia deve in sostanza supportare l'utente in ogni possibile interazione con l'applicazione, ma deve farlo senza che l'utente si debba mai porre troppe domande.
+
+\'E essenziale rispondere subito a due interrogativi: 
+\begin{itemize}
+	\item ``Chi saranno gli utenti dell'applicazione?'"'. Anzitutto è necessario sapere se gli utenti dell'applicazione web si troveranno dal lato server o da quello client. Ai primi si attribuisce in genere una funzione amministrativa e dunque si suppone che il loro livello tecnico sia sufficientemente alto. Altrettanto non si può ipotizzare per gli utenti client-side: essi accederanno all'applicazione prevalentemente tramite un browser per usufruire del servizio offerto, ma spesso senza disporre di conoscenze specifiche. In questo caso l'interfaccia assume un ruolo-guida molto più rilevante.
+	
+Per classificare l'utenza inoltre si ricorre ad un insieme di parametri qualitativi: esperienza informatica, esperienza del Web, conoscenza del campo applicativo del software ed esperienza nell'uso di applicazioni simili.
+
+	\item ``Quale approccio generale seguire nel disegno?'"'. Individuata l'utenza tipica, bisogna pensare a quale schema generale di disegno sia più adatto. Ad esempio, per supportare utenti ``inesperti'"' si può considerare l'inserimento di numerose schermate di \emph{wizard}, che guidino passo dopo passo attraverso scelte complicate. Importante è poi la \emph{metafora}\index{Metafora} che deve accomunare ogni elemento del disegno: una metafora è un ponte tra le esperienze dell'utente nel mondo reale (ed informatico) e quelle fatte nell'applicazione. Ad esempio si può scegliere di rappresentare graficamente una funzione ``calcolatrice'"' in tanti modi diversi, ma disegnarla simile alle calcolatrici reali aiuta sicuramente l'utente a capirne l'uso. Una metafora sbagliata disorienta notevolmente un utente.
+\end{itemize}
+	
+Un programmatore non può prevedere tutte le singole impressioni che la sua interfaccia susciterà negli utenti, ma può verificare oggettivamente che il significato di un elemento sia consistente ogni volta che appare nell'interfaccia. Gli errori stessi dovrebbero essere presentati in modo coerente al resto del disegno.
+
+Il disegno di un'interfaccia web non si limita ad interessare la ``piacevolezza'"' dell'utilizzo, riguarda da vicino anche l'interazione in termini di input/output. Durante l'uso dell'applicazione, l'utente dovrà inserire spesso dei valori in input per poi attendersi la presentazione dei relativi output. In queste fasi l'applicazione lo dovrà guidare ed aiutare tramite tutta una serie ben combinata di \emph{controlli grafici}: dai semplici \emph{tag} HTML (form, bottoni, \ldots) ai controlli dinamici realizzati in Java, ActiveX, JavaScript e così via, fino all'utilizzo di \emph{Server-Side Includes} (SSI) e \emph{Cascading Style Sheets} (CSS). La presentazione degli output è vitale quando si ha a che fare con dati provenienti da database in quanto occorre saperli organizzare in tabelle che ne permettano una facile e veloce consultazione. 
+
+\item L'\textbf{implementazione dell'interfaccia} ha invece un occhio di riguardo per le operazioni che stanno dietro ogni elemento. In sostanza si richiede ad ogni componente di ``fare quello che ci si immagina che faccia a giudicare dal disegno'"'. I test di questo tipo sono spesso svolti in concomitanza di quelli funzionali. Alcune complicazioni specifiche del Web circa l'implementazione di interfacce sono: 
+\begin{itemize}
+	\item la diversa interpretazione da parte dei vari browser;
+	\item l'invio ritardato al server degli input immessi dall'utente: fin quando l'utente non dà esplicito avvio alla trasmissione, i valori immessi sono presenti solo sul client e quindi c'è pericolo di perdita dei dati, benché l'interfaccia dia l'impressione che ogni inserimento sia definitivo;
+	\item l'esecuzione di script non è sempre consentita sul client;
+	\item il bottone ``Back'"', presente in ogni browser, complica le relazioni tra le pagine web, in quanto, consentendo di tornare all'ultima pagina visitata, può non rispettare i link presenti sulla pagina attuale;
+	\item la risoluzione di schermo ed i caratteri installati nel sistema influiscono sulla presentazione dell'interfaccia.
+\end{itemize}
+\end{itemize}
+
+\subsection{Functional test}
+Il testing delle funzionalità di un'applicazione web riguarda la verifica di ciò che l'applicazione dovrebbe fare, relativamente alle aspettative dell'utente. In questa categoria rientrano molte sotto-tipologie di test: i FAST, i TOFT, i boundary test, i forced-error test e parte dei security test.
+
+\begin{itemize}
+	\item FAST: come descritto nella sezione precedente, i FAST mirano a
+dimostrare la correttezza delle funzionalità ad un basso livello, senza prendere in considerazione le combinazioni con altre funzionalità (testate nei TOFT). Nel caso delle applicazioni web, uno dei loro obiettivi è verificare il comportamento dei singoli componenti dell'interfaccia (text-box, bottoni, bandierine, ma anche i link grafici e testuali), i loro eventuali valori di default e via dicendo.	Sono considerate caratteristiche chiave in ambito Web anche operazioni come il log in/log out, la ricerca, l'autenticazione ed il recupero password smarrite.
+
+\item TOFT: nei TOFT si pone l'attenzione sulla capacità dell'applicazione di soddisfare compiti più articolati, esplicitamente richiesti nel progetto. In generale vengono eseguiti dopo i FAST, in quanto si basano su liste di caratteristiche di base prese già singolarmente in esame. \'E da stabilire in questo contesto se combinazioni opportune di queste caratteristiche riescono a soddisfare dei requisiti particolari. Ad esempio potrebbe essere richiesto che il task composto dalla sequenza log in e autenticazione venga eseguito entro un dato tempo.
+	\item Forced-error test: lo scopo di questi test è trovare le condizioni di errore ignorate o gestite male. Ad esempio, se un campo di un modulo ammette come valide solo sequenze di caratteri alfabetici, l'introduzione di un numero genera una condizione di errore che deve essere gestita correttamente affinché il test sia considerato superato. Per ogni condizione di validità ce n'è sempre una di invalidità. La maggiore complicazione nell'ambito Web consiste nella quantità di soggetti che entrano in gioco per alcune transazioni: oltre al client ed al server vi è tutta una catena di ``intermediari'"' (tra cui la rete stessa) che concorrono alla realizzazione di un certo servizio, ognuno dei quali può generare errori difficilmente prevedibili (e gestibili) nel complesso.	
+	\item Boundary test: i boundary test considerano i limiti nel dominio di ogni funzionalità e la mettono alla prova per tali valori. Possono considerarsi delle estensioni dei forced-error test e dei TOFT.	
+\end{itemize}
+
+Una sottotipologia che riassume un pò tutte quelle elencate è quella degli \emph{Exploratory test}, che consiste nello ``spostarsi'"' all'interno dell'applicazione e testare di volta in volta le funzionalità incontrate.
+
+\subsection{Database test}
+Tutte le applicazioni web che necessitano di accesso ai dati hanno bisogno di un \emph{database server}\index{Database server}. I database giocano un ruolo importantissimo nel Web. Essi ospitano i dati delle applicazioni e gestiscono le loro operazioni di inserimento, cancellazione ed interrogazione. Una delle tecnologie comunemente usate per i web-database è quella dei \emph{database relazionali}\index{Database relazionali}. I database relazionali sono composti da tabelle che possono essere facilmente riorganizzate e visitate. I dati sono contenuti in \emph{record} relativi a dei campi a loro volta appartenenti alle tabelle. In ambito Web poi, l'archivio è spesso disperso tra molteplici server, per questo si parla di \emph{database distribuito}\index{Database distribuito}. Il database server viene normalmente implementato tramite un apposito linguaggio, \emph{SQL} (Structured Query Language), che offre tutta una serie di primitive per manipolare i dati nelle tabelle bidimensionali. 
+
+Anche nel caso dei database vi sono molti punti di interazione tra l'applicazione client, quella server, il database server e gli altri soggetti della catena. Perciò è necessario applicare procedure di testing a vari livelli. Particolarmente delicata è la funzione degli script che gestiscono i dati, poiché rappresentano un'astrazione del database per le applicazioni client e server. 
+
+Due classi di problemi derivate dai bug nei database sono gli \emph{integrity error} e gli \emph{output error}\index{Integrity error}\index{Output error}. Gli integrity error possono essere visti come un danneggiamento o una perdita dei dati contenuti nei record; gli output error invece si hanno quando, nonostante i dati siano correttamente archiviati, non è possibile recuperarli. I sintomi evidenziati da entrambe le classi di bug sono simili, per questo è difficile capire di che tipo di errore si tratta (e dove è localizzato) con i test black-box. Vi sono invece numerosi tipi di test white-box che permettono l'individuazione di bug nei database con discreta efficienza. I test black-box rimangono comunque indicati per rilevare le anomalie, in quanto vengono eseguiti dal browser e dunque rispecchiano direttamente il comportamento del database dal punto di vista dell'utente. 
+
+\subsection{Installation test}
+Questo tipo di test si concentra prevalentemente sull'eliminazione di tutta una serie di problemi che possono sorgere in fase di installazione dell'applicazione web: 
+\begin{itemize}
+	\item variabili di sistema non trovate implicano un'auto-configurazione scorretta;
+	\item copie incomplete di file dovute a errori di trasmissione;
+	\item incompatibilità hardware/software;
+	\item interferenze da parte dell'utente in momenti critici;
+	\item interferenze da parte di \emph{firewall} ed antivirus.
+\end{itemize}
+La maggior parte delle applicazioni web prevede un'installazione solo dal lato server, ma ci sono anche casi in cui, viste le particolari funzionalità da svolgere, i comuni browser sono ritenuti non idonei e viene realizzato un apposito client. In queste eventualità i test devono riguardare anche il lato client dell'applicazione. 
+
+Testare i processi di installazione presuppone una solida conoscenza dei sistemi operativi e dell'ambiente in cui il tool di installazione opererà. Alcune delle principali operazioni svolte dal software di installazione (\emph{installer}) sono:
+\begin{itemize}
+	\item lanciare l'installazione dall'host sorgente;
+	\item mantenere un log di installazione nell'host destinazione;
+	\item recuperare le informazioni necessarie sull'ambiente destinazione ed installare l'applicazione secondo le opzioni scelte dall'utente;
+	\item decomprimere eventuali file compressi;
+	\item aggiornare il registro di sistema (Windows).	
+\end{itemize}
+A queste operazioni è associato un insieme di possibili errori suddivisi in classi:
+\begin{itemize}
+	\item \emph{Functionality error}: quando l'installer fallisce il proprio obiettivo di completare l'installazione per i motivi più svariati (impossibilità di effettuare il \emph{reboot}, mancanza di spazio su disco, impossibilità di creare directory e così via);
+	\item \emph{User interface design error}: quando l'interfaccia utente non rappresenta correttamente i risultati dell'installazione;
+	\item \emph{User interface implementation error}: quando l'interfaccia non implementa bene alcune funzionalità, quali ad esempio la semantica delle opzioni di setup propedeutiche all'installazione;
+	\item \emph{Misinterpreting collected information}: quando le informazioni raccolte sul sistema non sono quelle reali;
+	\item \emph{Operating system error}: quando avviene un errore del sistema operativo sottostante all'applicazione, durante l'installazione.	
+\end{itemize}
+Terminata con successo l'installazione è comunque indicato verificare, con test black-box, che effettivamente tutto sia andato a buon fine.
+
+D'altro canto, se si vuol offrire un servizio completo, è necessaria anche la presenza dei tool che si occupano della disinstallazione dell'applicazione (salvando eventualmente i dati dell'utente). 
+
+Un \emph{uninstaller} dovrà provvedere a:
+\begin{itemize}
+	\item rimuovere le directory create;
+	\item rimuovere i file dell'applicazione;
+	\item controllare se alcuni file usati dall'applicazione sono condivisi con altri software ed in caso affermativo informare l'utente;
+	\item ripristinare lo stato dei registri di sistema (Windows).
+\end{itemize}
+Anche durante queste fasi possono sorgere numerosi errori. \'E naturale dunque che si debba procedere con test che verifichino l'effettiva eliminazione dell'applicazione. 
+
+Alcuni scenari di test che dovrebbero essere comunque considerati sono i seguenti:
+\begin{itemize}
+	\item installare l'applicazione senza la configurazione minima richiesta;
+	\item installare l'applicazione in un sistema operativo ``pulito'"' oppure ``affollato'"' da altre applicazioni;
+	\item installare l'applicazione originale e successivamente i suoi aggiornamenti;
+	\item controllare come l'installer reagisce se lo spazio su disco è insufficiente o l'installazione viene interrotta a metà.
+\end{itemize}
+
+\subsection{Configuration e compatibility test}
+L'obiettivo dei test di configurazione e compatibilità è quello di trovare errori nell'applicazione mentre lavora negli ambienti più diffusi tra gli utenti. La strategia è spesso quella di eseguire un certo insieme selezionato di FAST, TOFT e forced-error test (benché sia difficile pilotare gli errori di ambiente nel Web), così da mettere alla prova la maggior parte delle caratteristiche del software nel contesto in cui si trova. Dalla parte del server si dovrebbero privilegiare i test che evidenziano le interazioni dell'applicazione con
+\begin{itemize}
+	\item il web server stesso;
+	\item il database server;
+	\item il firewall;
+	\item il sistema operativo;
+	\item l'hardware;
+	\item le applicazioni concorrentemente eseguite.
+\end{itemize}
+Dal lato client invece ci vuole particolare attenzione per 
+\begin{itemize}
+	\item i browser, di varie versioni;
+	\item i sistemi operativi;
+	\item i firewall ``familiari'"' e le applicazioni di limitazione dell'accesso dei bambini al Web;
+	\item anti-virus;
+	\item periferiche audio/video.
+\end{itemize}
+Infine, a prescindere dal lato dell'applicazione, è da verificare il corretto funzionamento con protocolli, periferiche e dispositivi di rete:  TCP/IP, modem, schede di rete, bridge, router, hub e così via.
+
+Sotto molti aspetti questo tipo di test è particolarmente costoso. \'E ovviamente impossibile considerare tutte le possibili combinazioni di hardware e software presenti sul mercato per i propri test di compatibilità! \'E necessaria invece un'apposita indagine statistica, che selezioni solo gli ambienti maggiormente diffusi tra gli utenti, sia del lato client che del lato server. \'E inoltre richiesta ai verificatori una buona conoscenza del comportamento e dei punti deboli delle maggiori tecnologie attualmente sul Web. 
+
+In genere, questo tipo di test, se deve essere eseguito su larga scala, viene affidato in \emph{outsourcing} ad aziende specializzate. Esse dispongono di appositi laboratori per testare non solo le configurazioni più diffuse ma anche, a campione, quelle meno comuni.
+
+\subsection{Performance, load e stress test}
+Tra i problemi tipici dell'ambito di rete ci sono i ritardi e le interruzioni di comunicazione. Queste disfunzioni possono essere determinate da vari fattori: traffico nella rete, algoritmi inefficienti, errori di trasmissione e hardware non adeguato. \'E importante stabilire se un'applicazione web sa interagire con l'utente nei tempi previsti nella maggior parte dei casi e quali sono invece i limiti che non è consigliato oltrepassare. 
+
+I test di performance, load e stress sono legati tra loro e si distinguono più che altro per le diversa interpretazione dei risultati ottenuti: i test di performance mirano ad individuare una strategia per ottenere buone prestazioni dall'applicazione; i test di load puntano a valutare le performance con vari livelli di caricamento e utilizzo, per determinare oltre quale livello scadono sostanzialmente; gli stress test infine hanno lo scopo di provare l'applicazione in condizioni di utilizzo estreme, quali l'utilizzo contemporaneo da parte di un elevato numero di utenti.
+
+I test sono costituiti da simulazioni di un utilizzo ``tipico'"' dell'applicazione da parte di centinaia o migliaia di utenti. Essendo impraticabile l'impiego di un tale numero di utenti umani diventa essenziale l'uso dei tool di testing automatico, i quali provvedono ad eseguire contemporaneamente le operazioni svolte da molti utenti virtuali. 
+
+Il risultato di questi test può essere positivo se le performance si mantengono accettabili rispetto ai livelli di utilizzo previsti, o negativo se invece l'applicazione (o l'ambiente nel quale si trova) è in difficoltà anche con un numero non esagerato di utilizzi concorrenti.
+
+Con i test di stress è possibile individuare quale tra le seguenti risorse hardware tende ad esaurirsi prima:
+\begin{itemize}
+	\item memoria;
+	\item tempo di \emph{CPU};
+	\item \emph{banda passante};
+\end{itemize}
+e dove invece si manifestano delle insufficienze software come:
+\begin{itemize}
+	\item fallimenti causati da interrupt hardware;
+	\item fallimenti legati alle operazioni in memoria;
+	\item \emph{deadlock};
+	\item problemi di multithreading.
+\end{itemize}
+\'E bene sottolineare l'importanza di questi test per tutte le applicazioni Web che provengono dalla ``New Economy'"': per un sito come Amazon o per l'e-banking, più che per altri tipi di applicazione, le attese imposte all'utente pesano sull'immagine e sulla qualità complessiva del servizio. Un'applicazione che si prefigge di soddisfare il più largo bacino di utenza possibile (perché ogni utente è fonte di un introito economico), non può permettersi problemi di performance con bassi livelli di utilizzo.

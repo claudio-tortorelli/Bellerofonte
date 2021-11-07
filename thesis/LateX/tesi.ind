@@ -1,0 +1,123 @@
+\begin{theindex}
+
+  \item Acceptance test, 24
+  \item Analisi dinamica, 13
+  \item Analisi mutazionale, 13
+  \item Analisi statica, 13
+
+  \indexspace
+
+  \item Black-Box testing, 14
+  \item Browser, 31
+  \item Bug, 14
+
+  \indexspace
+
+  \item Check list, 23
+  \item Claroline, 82
+  \item Client, 29
+  \item Codice embedded, asserzioni, 21
+  \item Correttezza software, 13
+  \item Criterio di copertura, 19
+
+  \indexspace
+
+  \item Database distribuito, 44
+  \item Database relazionali, 43
+  \item Database server, 43
+  \item Debugging, 13
+  \item Dijkstra, tesi di, 12
+
+  \indexspace
+
+  \item Failure, 13
+  \item Fat client, 30
+  \item Fat server, 30
+  \item Fault, 13
+  \item Fixed, fissare errori, 14
+  \item Formalismi descrittivi, 20
+
+  \indexspace
+
+  \item Gray-Box testing, 14
+
+  \indexspace
+
+  \item HTML, 31
+  \item HTTP, 31
+
+  \indexspace
+
+  \item Integrazione dinamica, 34
+  \item Integrity error, 44
+  \item Interfacce col File System, 19
+  \item Interfacce di comunicazione, 19
+  \item Interfacce software, 19
+  \item Interfacce umane, 18
+  \item IP, 30
+
+  \indexspace
+
+  \item Macro test, 56
+  \item Metafora, 41
+  \item Millennium Bug, 17
+  \item Modello Peer, 35
+
+  \indexspace
+
+  \item Oracolo, 20
+  \item Output error, 44
+
+  \indexspace
+
+  \item Polimorfismo, 63
+  \item Problema della fermata, 12
+
+  \indexspace
+
+  \item Scenario di test, 19
+  \item Self-testing, 21
+  \item Server, 29
+  \item Servizio di rete, 32
+  \item Sever multi-livello, 30
+  \item Single test, 55
+  \item Successo nei test, 13
+
+  \indexspace
+
+  \item TCP, 29
+  \item Test case, 15
+  \item Test data adequacy criteria, 19
+  \item Test di regressione, 21
+  \item Test plan, 15
+  \item Test script, 15
+  \item Test suite, 15
+  \item Test types, 38
+  \item Testability, 23
+  \item Testing in grande, 15
+  \item Testing in piccolo, 14
+  \item Tool di testing automatici, 20
+
+  \indexspace
+
+  \item URL, 31
+
+  \indexspace
+
+  \item Validazione, 13
+  \item Verifica, 13
+
+  \indexspace
+
+  \item Web, 31
+  \item Web server, 31
+  \item Web service, 33
+  \item Web service architecture, 34
+  \item Web spider, 51
+  \item White-Box testing, 14
+
+  \indexspace
+
+  \item XML, 34
+
+\end{theindex}

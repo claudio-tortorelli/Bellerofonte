@@ -1,0 +1,72 @@
+\indexentry{Dijkstra, tesi di}{12}
+\indexentry{Problema della fermata}{12}
+\indexentry{Successo nei test}{13}
+\indexentry{Correttezza software}{13}
+\indexentry{Verifica}{13}
+\indexentry{Validazione}{13}
+\indexentry{Debugging}{13}
+\indexentry{Analisi dinamica}{13}
+\indexentry{Analisi statica}{13}
+\indexentry{Analisi mutazionale}{13}
+\indexentry{Failure}{14}
+\indexentry{Fault}{14}
+\indexentry{Bug}{14}
+\indexentry{Fixed, fissare errori}{14}
+\indexentry{Black-Box testing}{14}
+\indexentry{White-Box testing}{14}
+\indexentry{Gray-Box testing}{14}
+\indexentry{Testing in piccolo}{15}
+\indexentry{Testing in grande}{15}
+\indexentry{Test case}{15}
+\indexentry{Test script}{15}
+\indexentry{Test suite}{15}
+\indexentry{Test plan}{15}
+\indexentry{Millennium Bug}{18}
+\indexentry{Interfacce umane}{19}
+\indexentry{Interfacce software}{19}
+\indexentry{Interfacce col File System}{19}
+\indexentry{Interfacce di comunicazione}{19}
+\indexentry{Scenario di test}{19}
+\indexentry{Criterio di copertura}{19}
+\indexentry{Test data adequacy criteria}{20}
+\indexentry{Tool di testing automatici}{20}
+\indexentry{Oracolo}{21}
+\indexentry{Formalismi descrittivi}{21}
+\indexentry{Codice embedded, asserzioni}{21}
+\indexentry{Self-testing}{21}
+\indexentry{Test di regressione}{22}
+\indexentry{Check list}{23}
+\indexentry{Testability}{23}
+\indexentry{Acceptance test}{24}
+\indexentry{Client}{29}
+\indexentry{Server}{29}
+\indexentry{TCP}{30}
+\indexentry{IP}{30}
+\indexentry{Fat client}{30}
+\indexentry{Fat server}{30}
+\indexentry{Sever multi-livello}{30}
+\indexentry{HTTP}{31}
+\indexentry{HTML}{31}
+\indexentry{Browser}{31}
+\indexentry{Web server}{31}
+\indexentry{URL}{31}
+\indexentry{Web}{31}
+\indexentry{Servizio di rete}{32}
+\indexentry{Web service}{33}
+\indexentry{Web service}{33}
+\indexentry{XML}{34}
+\indexentry{Integrazione dinamica}{34}
+\indexentry{Web service architecture}{34}
+\indexentry{Modello Peer}{35}
+\indexentry{Test types}{38}
+\indexentry{Metafora}{41}
+\indexentry{Database server}{43}
+\indexentry{Database relazionali}{44}
+\indexentry{Database distribuito}{44}
+\indexentry{Integrity error}{44}
+\indexentry{Output error}{44}
+\indexentry{Web spider}{51}
+\indexentry{Single test}{55}
+\indexentry{Macro test}{56}
+\indexentry{Polimorfismo}{63}
+\indexentry{Claroline}{85}

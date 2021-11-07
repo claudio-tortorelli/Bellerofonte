@@ -1,0 +1,312 @@
+\chapter{Manuale d'uso}
+
+In questo capitolo verranno illustrate le procedure di utilizzo di Bellerofonte. Prima però è bene chiarire quali sono e come sono strutturati i file e le directory usate dal programma. 
+
+\section{File di programma}
+Bellerofonte presume di lavorare sempre all'interno di un sistema predefinito di file e directory rappresentato in figura \ref{fig:fileProgram}.
+
+\begin{figure}[bp]
+	\begin{center}
+		\includegraphics[width=.7\textwidth, height = 	0.7\textheight]{immagini/fileProgram.eps}		
+	\end{center}		
+	\caption{Directory di lavoro di Bellerofonte}	
+	\label{fig:fileProgram}
+\end{figure}
+
+Il programma fa sempre riferimento alla directory webTestFile come propria \emph{root}, la quale a sua volta ha cinque sottodirectory: 
+\begin{itemize}
+	\item \emph{options}: contiene i file che specificano le impostazioni per l'esecuzione dei file test;
+	\item \emph{program}: vi sono i file necessari al programma (e agli utenti) per riconoscere i test singoli attualmente disponibili;
+	\item \emph{reports}: qui sono salvati i report in formato testo;
+	\item \emph{testTXT}: in questa cartella ci sono i file test in formato testo. Ognuno di essi rappresenta un Macro test da assemblare sulla base delle direttive lette da file. Il verificatore, nel preparare un nuovo test, si concentrerà prevalentemente su questi file. 
+	\item \emph{testXML}: gli oggetti Macro\_test serializzati, insieme ai propri report, vengono salvati in questa directory in formato XML. L'estensione dei file XML è ``.tst'"' ed il verificatore può leggerli ed eventualmente editarli con qualunque editor di testo o browser. La differenza tra i file test ``.txt'"' e quelli ``.tst'"' verrà illustrata tra breve.
+\end{itemize}
+
+Oltre alla directory webTestFile, all'interno del pacchetto ci sono altre directory di cui Bellerofonte non ha stretto bisogno ma che lo rendono più usabile:
+\begin{itemize}
+	\item \textbf{bin}: contiene degli script batch che ne agevolano l'uso e il mantenimento. 	
+\begin{enumerate}
+	\item ``belJAR.bat'"', quando viene avviato, va ad eseguire l'archivio jar contenente Bellerofonte. Questo script può essere invocato sia da ambiente DOS/Windows che da Unix (cambiandone i permessi di esecuzione), passandogli o meno i parametri che richiede Bellerofonte. Provvede infatti lo stesso Bellerofonte ad avviare un processo interattivo che interroga l'utente sugli input mancanti. Per questa particolarità, belJar è adatto ad essere richiamato anche da un ambiente a finestre, semplicemente cliccandoci sopra;
+	\item ``makeJar.bat'"' ha una funzione accessoria, utile agli sviluppatori di nuovi test singoli: esso aggiorna automaticamente l'archivio eseguibile ``bellerofonte.jar'"' con tutte le nuove definizioni ``.class'"' trovate. Per far questo va a leggere il file ``manifest.mf'"', dove tra l'altro viene impostata la variabile di ambiente ``Classpath'"' affinché Bellerofonte sappia dove trovare le varie librerie jar usate dai test singoli.
+\end{enumerate}
+
+	\item \textbf{jars}: questa directory contiene gli archivi jar compressi con i pacchetti utilizzati nei Single test o da Bellerofonte;
+	
+	\item \textbf{lib}: dentro lib si trova il jar eseguibile ``bellerofonte.jar'"' ed il relativo file ``manifest.mf'"';
+	
+	\item \textbf{orbilio$\backslash$webTest$\backslash$bellerofonte}: qui viene aggiornato l'output della compilazione dei file sorgenti. Vi sono i file ``.class'"' delle classi di programma e dei vari test singoli. Bellerofonte controlla in questa directory la presenza delle definizioni dei test singoli prima di istanziarne gli oggetti;
+	
+	\item \textbf{src}: in src stanno i file ``.java'"' ovvero i sorgenti di Bellerofonte e dei Single test;
+	
+	\item \textbf{various}: in various sono stati inseriti i file di documentazione insieme ad immagini significative (come quelle che appaiono in questa tesi). In particolare sono presenti (in vari formati) documenti per l'utilizzo e l'estensione di Bellerofonte e le sue API in formato HTML.
+\end{itemize}
+
+\section{Eseguire Bellerofonte}
+Illustrato l'ambiente nel quale ci si dovrà muovere, si può procedere col descrivere come eseguire Bellerofonte, soffermandosi su come accedere alle sue funzionalità e senza entrare nuovamente nei dettagli della loro implementazione. 
+Bellerofonte ha bisogno di alcuni parametri in input per essere eseguito:
+\begin{itemize}
+	\item il nome di un file opzioni;
+	\item il nome di un file test;
+	\item una parola chiave che lo istruisca su come trattare il report ed il Macro test eseguito. 
+\end{itemize}
+Come già si è detto nel capitolo precedente, i primi due valori sono necessari mentre il terzo è opzionale. Spostandosi nella cartella bin, la sintassi di esecuzione dalla riga di comando è la seguente:
+
+\footnotesize
+\begin{verbatim}
+belJar <OPZIONI.txt> [<TEST.txt>|<TEST.tst>]
+(saveToMacroTest|compareToOld|compareToOldAndSave|<REPORT.txt>|<NULL>)
+\end{verbatim}
+\normalsize
+oppure semplicemente
+\footnotesize
+\begin{verbatim}
+belJar 
+\end{verbatim}
+\normalsize
+In ogni caso è necessario preparare i file di cui il software fa richiesta prima dell'esecuzione. Bellerofonte li andrà a ricercare solo ed esclusivamente nelle directory predefinite. 
+
+\subsection{Preparare il file opzioni}
+Il primo parametro obbligatorio da preparare è il file di opzioni. Questi file possono essere editati dall'utente nella directory webTestFiles$\backslash$options con un qualsiasi editor di testo. La forma che deve avere un file opzioni è quella tipica dei \emph{file Properties} di Java, in cui si ha una serie di coppie \emph{chiave $=$ valore}. Le scelte selezionabili in ognuno di questi file sono numerose e suddivise in tre categorie:
+\begin{itemize}
+	\item Target options: descrivono il \emph{target} del test, ovvero l'indirizzo dal quale il test dovrà partire;
+	\item Client options: definiscono l'identità e le funzionalità generali del client, nella fattispecie Bellerofonte stesso;
+	\item HTTPUnit options: sono più strettamente legate alle modalità di rappresentazione degli oggetti web incontrati da parte di HTTPUnit.
+\end{itemize}
+La maggioranza delle scelte non ha bisogno di modifiche da parte del verificatore (se non per particolari tipi di test), ma è ovviamente obbligatorio inserire almeno un target raggiungibile.
+Un esempio di file opzioni ``pulito'"' (cioè non relativo a nessun sito testato) è ``options.txt'"', che si consiglia di utilizzare come modello (salvandolo quindi con un nuovo nome).
+Si è scelto di imporre la definizione separata dei file opzioni rispetto ai Macro test in quanto si suppone che il verificatore, oltre a crearsi una propria libreria di file test, realizzi anche un certo numero di opzioni relative ai siti da verificare. Ognuno di questi file sarà poi indipendente e combinabile liberamente con i file test.
+
+Dato che l'attuale versione di HTTPUnit ha mostrato problemi ad interpretare alcuni linguaggi di scripting, una soluzione è quella di disabilitare, quando necessario, il parsing di tali linguaggi. Per ulteriori informazioni e aggiornamenti su questa lacuna di HTTPUnit si rimanda al suo sito web.
+
+\subsection{Preparare il file test}
+La fase successiva è quella di definizione del Macro test in un file test. I file test possono avere due forme e due ruoli diversi:
+\begin{itemize}
+	\item Nel primo caso si suppone che il verificatore debba comporre un nuovo Macro test. Un nuovo Macro test viene descritto a partire da un file di testo in cui si elencano ordinatamente i nomi ed i parametri di ogni test singolo, separati dal carattere `$\mid$'.
+La sintassi di ogni riga di un file test è quindi 
+
+\footnotesize
+\begin{verbatim}
+<NOME SINGLE TEST>|*(PARAMETRO N-ESIMO|)
+\end{verbatim}
+\normalsize
+L'elenco dei test singoli con la loro sintassi e la semantica dei parametri è inserito nei file ``TestSynopsis.txt'"' e ``TestSynopsis.doc'"' (presente anche in formato pdf). Il verificatore può trovare degli esempi e prenderli come punto di partenza per i propri test in webTestFiles$\backslash$testTXT. 
+
+La definizione di un Macro test tramite file di testo implica la creazione di un nuovo oggetto Macro\_test all'interno di Bellerofonte. Questa osservazione è importante quando si devono gestire i salvataggi: se partendo da un file di testo era già stato salvato un oggetto Macro\_test in precedenza e questo conteneva dei report relativi a passate esecuzioni, l'aver forzato Bellerofonte a ricostruire un nuovo (ma omonimo) Macro\_test provoca una sovrascrittura, con conseguente perdita dei report già salvati. 
+
+Nell'editare un file di test ci si deve ricordare che quel che si scrive è \emph{case sensitive}, ovvero Bellerofonte è sensibile alla differenza tra maiuscole e minuscole. Riguardo ai parametri che seguono il nome c'è da dire che essi vengono di solito trattati tutti come stringhe e solo i Single test che ne fanno un uso particolare li convertono, dove serve, in valori numerici. I parametri, essendo delle stringhe, comprendono ogni carattere tra due delimitatori $\mid$ (spazi inclusi). Bisogna inoltre stare attenti a non lasciare righe vuote nel file test, che Bellerofonte potrebbe tradurre in modo imprevedibile. Un file test vuoto invece corrisponde ad un Macro test nullo. 
+
+Un file test ha pressappoco la funzione del test script, ovvero ordina e definisce i passi di un test riferito ad una singola caratteristica del sito. Tutti i test singoli che sono inseriti in un file test dovrebbero quindi concorrere alla verifica di un unico aspetto. Per questo se un test singolo effettua una modifica sull'oggetto che testa, influisce sulle esecuzioni dei test seguenti. 
+
+Un semplice esempio di file test in formato testo è il seguente:
+\footnotesize
+\begin{verbatim}
+FollowLinks|string|Home|
+CheckTitle|My HomePage|
+\end{verbatim}
+\normalsize
+
+	\item L'alternativa, citata in precedenza, alla definizione di un Macro test con un file di testo è quella di riutilizzare un oggetto XML serializzato, contenente un Macro\_test già definito. In pratica la serializzazione comprende il salvataggio dello stato dell'oggetto Macro\_test al termine della sua esecuzione: si memorizza il vettore dei Single test già costruito, il report attuale e le opzioni inizializzate (benché queste saranno comunque rilette e sovrascritte in successive esecuzioni). Un Macro test serializzato costituisce quindi un oggetto pronto per essere rieseguito, con in più la capacità di memorizzare e comparare i risultati delle sue esecuzioni. Altri due vantaggi dell'utilizzo di un file ``.tst'"', sono la maggior rapidità di esecuzione e la possibilità di visualizzare e modificare oggetti serializzati, perché codificati nell'ormai universale XML.
+Si deve però ricordare che un verificatore non può direttamente definire un oggetto di questo tipo. Esso deve necessariamente passare attraverso un Macro test su file di testo, il quale potrà essere serializzato in seguito alla sua prima esecuzione. Esempi di file ``.tst'"' si trovano nella cartella webTestFiles$\backslash$testXML.
+
+\end{itemize}
+  
+\subsection{Gestire i risultati}
+Il terzo aspetto, opzionale ma propedeutico all'esecuzione di un Macro test, è quello che riguarda la gestione dei risultati, ovvero del report e dell'oggetto Macro\_test. A seconda di quale parola chiave compaia come terzo parametro, Bellerofonte agisce di conseguenza:
+\begin{itemize}
+	\item nel caso in cui nessuna stringa segua i nomi dei file opzioni e test, il programma semplicemente termina subito dopo aver eseguito il Macro test specificato (restituendo cioè solamente i risultati a video);
+	\item quando compare qualsiasi stringa diversa dalle parole chiave riconosciute, il software la interpreta come nome di un file di testo. Tale file sarà usato per salvare il contenuto del report attuale nell'apposita directory webTestFile$\backslash$reports;
+	\item inserendo la parola chiave \emph{``saveToMacroTest'"'} Bellerofonte serializzerà il Macro\_test ed il report attuali in un file XML con estensione ``.tst'"' nella directory webTestFiles$\backslash$testXML. ``saveToMacroTest'"' può produrre effetti molto differenti: 
+\begin{enumerate}
+	\item se il Macro test viene letto da un file di testo e già esisteva un oggetto serializzato, questo viene sovrascritto (con conseguente cancellazione dei report contenuti);
+	\item altrimenti se viene letto da un file ``.tst'"', ``saveToMacroTest'"' provoca un salvataggio del report attuale nello stesso file XML. Un oggetto ``.tst'"' può contenere al massimo gli ultimi due report realizzati. Il salvataggio di un terzo report coincide con la cancellazione di quello più vecchio;
+\end{enumerate}
+	 
+	\item la parola chiave \emph{``compareToOld'"'} non implica il salvataggio del report attuale ma il confronto a video con i report precedenti. Questo parametro viene preso in considerazione da Bellerofonte solo se associato ad un Macro test già eseguito (quindi contenuto in un file ``.tst'"'). Attualmente non è previsto il salvataggio su file delle schermate di comparazione;
+	\item infine \emph{``compareToOldAndSave'"'}  provoca l'ovvia somma degli effetti delle due parole chiave precedenti. Si provvede a salvare il nuovo report sull'oggetto XML serializzato ed al tempo stesso si restituisce a video la sua comparazione con i due ultimi report salvati. Anche questa variante presuppone la lettura del Macro test da un file ``.tst'"'.
+\end{itemize}
+In ogni caso il programma accetta i parametri solo nell'ordine stabilito e le parole chiave illustrate in questa sezione si escludono a vicenda.
+
+\subsection{La console interattiva}
+La console interattiva consente al verificatore di avere sotto controllo tutti i file (opzioni, ``.txt'"' e ``.tst'"') fino a quel momento creati. Infatti Bellerofonte, nel richiedere i parametri di input, presenta a video un elenco degli oggetti contenuti nelle directory delle opzioni e dei test, così che l'utente possa selezionarli semplicemente digitandone il numero progressivo. Qualora questo numero non fosse inserito oppure non corrispondesse a nessun file, il programma terminerebbe chiudendo la console e senza eseguire alcun test. 
+
+Il verificatore può rispondere alle richieste della console anche digitando per intero (cioè compresa l'estensione) il nome dei file. Invece, nella terza domanda relativa alle parole chiave, la stringa introdotta come nome di file report viene automaticamente completata con l'estensione ``.txt'"' quando questa sia stata omessa.
+
+Se per mancanza degli input dalla riga di comando Bellerofonte è costretto ad avviare la console interattiva, la terminazione del programma dovrà essere preceduta dalla pressione del tasto ``Invio'"'.
+
+\subsection{Esempi pratici}
+Per concludere questo capitolo sull'uso pratico di Bellerofonte, si riportano alcuni esempi:
+\begin{enumerate}
+	\item \textbf{Verifica di un sito con parametri dalla riga di comando}:
+\begin{verbatim}
+ beljar orbilioLocal.txt testprova3.txt 
+\end{verbatim}
+\normalsize
+\textbf{Output}:
+\scriptsize
+	\begin{lstlisting}	
+C:\claudiosoft.bellerofonte\bin>echo off 
+
+Bellerofonte: ver. 1.0 --- 2-ago-2003 11.41.12
+ 
+-----------------------------------------------------
+REPORT OF TEST: testprova3.txt - 2-ago-2003 11.41.12
+-----------------------------------------------------
+ 
+1.0] TEST: "SetFormContent" | Url: http://127.0.0.1/index.php
+   Result expected: "Form: 0"
+   Result expected: "Field: uname"
+   Result expected: "Value to set: u1"
+   + TEST PASSED: The field has been setted at the expected value
+ 
+   # Seconds elapsed to accomplish the test: 0.10
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 
+2.0] TEST: "SetFormContent" | Url: http://127.0.0.1/index.php
+   Result expected: "Form: 0"
+   Result expected: "Field: pass"
+   Result expected: "Value to set: u1"
+   + TEST PASSED: The field has been setted at the expected value
+ 
+   # Seconds elapsed to accomplish the test: 0.0
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 
+3.0] TEST: "SubmitForm" | Url: http://127.0.0.1/index.php
+   Result expected: "Form: 0"
+   Result expected: "Button: "
+   + TEST PASSED: Button found and form submitted
+ 
+   # Seconds elapsed to accomplish the test: 0.551
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 
+Total seconds of execution: 0.561
+
+
+Result of tests in testprova3.txt:
+  * 3 tests PASSED;
+  * 0 tests FAILED;
+  * 0 GENERAL ERRORS;
+\end{lstlisting}
+\normalsize	
+	
+	\item \textbf{Verifica di un sito con uso di console interattiva}:
+\begin{verbatim}
+beljar 
+\end{verbatim}
+\textbf{Output}:
+\scriptsize
+\begin{lstlisting}	
+C:\claudiosoft.bellerofonte\bin>echo off 
+ 
+Bellerofonte: ver. 1.0 --- 2-ago-2003 11.53.54
+  
+* Write the name of options file that will be used from list below:
+ 
+0- options.txt
+1- orbilioLocal.txt
+2- orbilioThen.txt
+3- otherLocal.txt
+4- otherWWW.txt
+ 
+* Write the name of test file that will be used from list below:
+ 
+0- nullTest.txt
+1- testButtonValue.txt
+2- testFormField.txt
+3- testImage.txt
+4- testLink.txt
+5- testProva.txt
+6- testProva2.txt
+7- testProva3.txt
+8- testSubmit.txt
+9- testTitle.txt
+10- videoCall.txt
+11- testLink.tst
+ 
+* How must the report be treated ?
+[1] "saveToMacroTest"
+[2] "compareToOld"
+[3] "compareToOldAndSave"
+- nameReportInTXT
+- null
+  
+  
+  
+-----------------------------------------------------
+REPORT OF TEST: testFormField.txt - 2-ago-2003 11.54.03
+-----------------------------------------------------
+ 
+1.0] TEST: "CheckFormField" | Url: http://127.0.0.1/index.php
+   Result expected: "Form: 0"
+   Result expected: "Field: uname"
+   + TEST PASSED: The form has the field expected
+ 
+   # Seconds elapsed to accomplish the test: 0.10
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 
+Total seconds of execution: 0.10 
+ 
+Result of tests in testFormField.txt:
+  * 1 tests PASSED;
+  * 0 tests FAILED;
+  * 0 GENERAL ERRORS;
+ 
+(press Enter) --- 2-ago-2003 11.54.06
+\end{lstlisting}
+\normalsize
+	
+	\item \textbf{Comparazione tra due report di un Macro test già serializzato in precedenza}:
+\begin{verbatim}
+beljar orbiliolocal.txt testFormField.tst compareToOld
+\end{verbatim}	
+
+\textbf{Output}:
+\scriptsize
+\begin{lstlisting}		
+C:\claudiosoft.bellerofonte\bin>echo off 
+
+Bellerofonte: ver. 1.0 --- 2-ago-2003 14.14.04
+ 
+-----------------------------------------------------
+REPORT OF TEST: testFormField.txt - 2-ago-2003 14.14.06
+-----------------------------------------------------
+ 
+1.0] TEST: "CheckFormField" | Url: http://127.0.0.1/index.php
+   Result expected: "Form: 0"
+   Result expected: "Field: uname"
+   + TEST PASSED: The form has the field expected 
+   
+ # Seconds elapsed to accomplish the test: 0.0
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+ 
+Total seconds of execution: 0.10
+
+COMPARISON BETWEEN LAST TESTS (Actual Test , Old Test , Very Old Test)
+---------------------------------------------------------------------
+CheckFormField , CheckFormField
+- - - - - - - - - - - - - - - - - - - - - - - - - - 
+PASSED , PASSED
+- - - - - - - - - - - - - - - - - - - - - - - - - - 
+0.20 , 0.10
+----------------------------------------------------
+
+Result of tests in testFormField.txt:
+  * 1 tests PASSED;
+  * 0 tests FAILED;
+  * 0 GENERAL ERRORS;
+\end{lstlisting}
+\normalsize
+	\item \textbf{Applicazione di Bellerofonte in vari test consecutivi, a formare una test suite}:
+\begin{verbatim}
+beljar orbiliolocal.txt testprova2.txt saveToMacroTest | 
+beljar orbiliolocal.txt testprova3.txt rep2.txt
+\end{verbatim}
+In questo caso il risultato è la visualizzazione a schermo dell'ultimo report compilato (``rep2.txt'"'), il suo salvataggio come file di testo nella cartella webTestFiles$\backslash$reports e la serializzazione del file di test ``testprova2.txt'"' nella directory webTestFiles$\backslash$testXML;	
+\end{enumerate}
+
+
+

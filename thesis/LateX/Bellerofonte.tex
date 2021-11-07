@@ -1,0 +1,318 @@
+\chapter{Presentazione del software}
+
+In questo capitolo si descriverà l'architettura di Bellerofonte,  software di web testing realizzato nell'ambito di questa tesi. Si intende così fornire ad eventuali altri sviluppatori le informazioni necessarie per poterlo estendere secondo le proprie esigenze. Nel prossimo capitolo invece è stata inserita una descrizione più pratica, comprendente un manualetto d'uso, per consentire al semplice utente di apprendere rapidamente l'utilizzo del programma.
+
+\section{Descrizione ad alto livello}
+
+\subsection{Dal mito al software}
+Prima di descrivere ciò che Bellerofonte si propone di raggiungere e come cerca di farlo, si spenderà qualche parola sul suo nome e sul mito al quale si ispira. 
+
+La cultura greca ci ha tramandato un numero considerevole di eventi mitici con forti contenuti simbolici. Il mito di Bellerofonte, eroe greco, racconta, tra le altre sue vicissitudini, della lotta con la \emph{Chimera}, il mostro con tre teste: leone, capra e serpente. L'eroe riuscì nell'impresa di sconfiggere la Chimera grazie alla sua abilità ed a Pegaso, il cavallo alato, grazie al quale poté colpirla dall'alto.
+
+La Chimera nella nostra cultura continua a simboleggiare ciò che è insormontabile, difficile da raggiungere o da sconfiggere.
+
+Nell'ambito del web testing la Chimera è rappresentata dai bug e dalla speranza di scovarli tutti. Un software che dunque si proponga di ``lottare'"' con i bug, non può non identificarsi in Bellerofonte. Per concludere l'analogia, Pegaso sarà l'interfaccia di Bellerofonte, cioè lo strumento che ne facilita la lotta. 
+
+\subsection{Cosa è Bellerofonte}
+Si deve subito premettere che Bellerofonte è un software pensato per essere usato da sviluppatori e verificatori. Non possiede di per sé particolari accorgimenti che ne consentano un facile uso da parte di utenti generici, ma punta ad essere semplice per gli utenti specializzati. Per innalzare il livello di usabilità dovrebbe essere sviluppata un'interfaccia indipendente (Pegaso appunto), grafica o meno, che guidi l'utente nell'editing dei file di cui Bellerofonte ha bisogno. 
+
+Come si è mostrato sinteticamente nel capitolo quattro, esistono già molti tool e librerie a supporto del web testing. Ci sono però delle critiche che si possono sollevare a molti software in commercio:
+\begin{itemize}
+	\item alcune librerie consentono di creare solo dei test case ``statici'"', cioè relativi alla particolare caratteristica da verificare e difficilmente adattabili a nuovi contesti;
+	\item spesso, dove è permessa l'estrazione e la contestualizzazione delle variabili del test, non è però consentita l'integrazione con altre librerie;
+	\item pochi tool dispongono di un'interfaccia valida dalla riga di comando e dunque sono difficilmente richiamabili da uno script esterno;
+	\item nonostante il Web accomuni molti tipi di sistemi operativi diversi, alcuni tool sono progettati per essere eseguiti solo su un gruppo ristretto di essi. Analogamente ci sono dei software che possono testare solo le applicazioni web inserite in determinati ambienti, il tutto a scapito della portabilità;
+	\item scrivere un nuovo tipo di test, relativo ad una particolare funzionalità da testare, non è sempre permesso o può essere difficile integrarlo ai test già esistenti;
+	\item la descrizione dei test case da far eseguire al tool può non essere immediata e sintetica o può presupporre conoscenze avanzate.
+\end{itemize}
+Presa coscienza dell'esistenza di questi punti deboli nei software di web testing, si è cercato, per quanto possibile, di eliminarli in Bellerofonte, che si propone dunque come uno strumento di analisi \emph{data driven} per la rilevazione di bug in siti web. Esso offre un insieme di test ``atomici'"', componibili fra loro, capaci di emulare la navigazione in un sito da parte di un utente che faccia uso di un browser web.
+
+Bellerofonte si inserisce tra gli strumenti di web testing automatici, utilizzabili nella fase di analisi dinamica della verifica. Con questo software si vuol rendere agevole sia la programmazione di specifici test da parte degli sviluppatori (parallelamente alla realizzazione della nuova funzionalità), sia l'esame ripetuto nel tempo da parte dei verificatori. \'E quindi un software adatto anche a forme di web testing regressivo.
+
+I test eseguibili sono essenzialmente di tipo gray-box, funzionale, che non guarda tanto alla sintassi di ciò che esamina quanto alla sua rappresentazione tramite il client. Si può parlare di testing gray-box in quanto è necessaria, da parte dei realizzatori di un test, anche una conoscenza diretta (di tipo white-box) dell'elemento da testare: saper identificare nomi, gerarchie e relazioni interne è essenziale per produrre test mirati ed efficaci. 
+
+Dato che la tecnologia di rete è in continua evoluzione e le funzionalità disponibili sul Web sono le più disparate, uno dei principali obiettivi di Bellerofonte è quello di raggiungere un certo grado di flessibilità nella tipologia dei test eseguibili. La sua architettura è dunque stata pensata per permettere una facile integrazione di test atomici scritti ex-novo, utilizzando magari librerie innovative, diverse da quelle usate nei test precedentemente implementati. 
+
+I test atomici, che in seguito saranno definiti ``Single test'"' o test singoli, possono d'altra parte essere di complessità molto variabile: da una banale verifica del titolo di una pagina web alla più complicata visita in profondità di un sito. Rispettando alcune caratteristiche di base è quindi possibile aggiungere a Bellerofonte test specifici compresi in categorie di web testing diverse da quella strettamente funzionale.
+
+\subsection{Gerarchia dei test eseguibili}
+Bellerofonte gestisce i test a due livelli diversi: 
+\begin{itemize}
+	\item i \emph{Single test}\index{Single test} sono i test atomici componibili citati in precedenza, i quali corrispondono semanticamente ai test case definiti nel capitolo due. Essi sono costruiti sulla base delle funzionalità messe a disposizione dai pacchetti Java di web testing  (per esempio HTTPUnit), da quelle presenti in altri tool eseguibili dalla riga di comando o da una loro combinazione. Un test singolo si incarica della verifica di un'unica caratteristica dell'applicazione web. Esempi di Single test sono: l'individuazione di un determinato link, la navigazione attraverso esso, il controllo di un titolo di pagina, la scrittura in un campo di un form e così via. I Single test non sono direttamente eseguibili: devono essere inclusi in un Macro test (si veda il punto seguente) per contestualizzarne e gestirne gli input e gli output.
+	\item i \emph{Macro test}\index{Macro test} non sono altro che insiemi strutturati di Single test e per questo il loro ruolo si avvicina a quello dei test script. Essi rappresentano una sequenza logicamente coerente di Single test, volta a simulare l'interazione di un browser con un sito web. Ogni Single test si preoccupa di effetture solo dei controlli limitati, mentre invece lo svolgimento di un Macro test, inteso come insieme di test singoli, si traduce in un'analisi complessiva del sito così come lo ``vedrebbe'"' un utente. Il Macro test non è solo un contenitore di Single test, ma, come si vedrà, ha anche svariati compiti di coordinazione.
+\end{itemize}
+Il compito di un verificatore è quello di definire Macro test a partire da Single test preesistenti o appositamente implementati.
+
+%*****************************************************************
+
+\section{Dettagli implementativi}
+Evitando di procedere ad un esame diretto del codice, per altro commentato, si illustreranno adesso i dettagli strutturali e le scelte implementative fatte per realizzare Bellerofonte.
+
+\subsection{Linguaggio e strumenti di sviluppo}
+Bellerofonte è stato realizzato in Java. La scelta è caduta su questo linguaggio perché è particolarmente indicato per la realizzazione di applicazioni di rete ed ha un buon grado di portabilità. Nella fattispecie sono disponibili per Java numerosi pacchetti (o collezioni di classi) rivolti al testing di vario genere e dunque anche al web testing. I pacchetti più usati, tra quelli destinati al testing di applicazioni web, sono HTTPUnit, JWebUnit e XMLTestSuite, i quali offrono astrazioni molto comode per operazioni di rete di basso livello. 
+
+Il meccanismo di compilazione ed interpretazione run-time di Java risulta penalizzante se si guarda alle prestazioni che un software deve garantire in certi contesti. Nel caso di Bellerofonte però le prestazioni hanno un'importanza relativa, in quanto i tempi di esecuzione dipendono prevalentemente dallo stato della rete, piuttosto che dall'efficienza del software. \'E invece essenziale assicurare la portabilità di un software, quando non si conosce su quale tipo di piattaforma sarà impiegato (Windows, Unix, Mac-OS e così via). Bellerofonte nasce e sarà utilizzato in ambito universitario e quindi deve garantire quanta più portabilità possibile. Java, tramite l'interpretazione del \emph{byte-code} generico da parte delle \emph{Java Virtual Machine} specifiche, consente di svincolarsi dalla specifica piattaforma di esecuzione.
+
+Per scrivere il codice di Bellerofonte si è utilizzato l'editor per Windows JCreator ver. 2.5, che si integra con l'ambiente di sviluppo della Sun Java 2 SDK 1.4.0.03. Il funzionamento è quindi garantito solo con versioni di interpreti Java uguali o superiori all'1.4.
+
+\subsection{Utilizzo di pacchetti esterni}
+Per implementare i Single test da gestire ed eseguire con Bellerofonte, sono stati usati pacchetti Java aggiuntivi (open source). A loro volta i pacchetti importati dipendono spesso da altri pacchetti che in questa sede non verranno descritti.
+\begin{itemize}
+	\item \textbf{com.meterware.httpunit}: Bellerofonte è stato basato su questo pacchetto in quanto, tra quelli relativi al web testing in Java, è il più utilizzato e completo. Oltre che per la realizzazione di gran parte dei Single test, ci si riferisce ad HTTPUnit per la gestione delle opzioni ed il passaggio di alcuni parametri tra un Single test e l'altro. Benché Bellerofonte non possa prescindere da HTTPUnit, è stato fatto il possibile per limitarne la dipendenza a livello di Single test. Legarsi ad un unico pacchetto è infatti un approccio troppo restrittivo ed inoltre, mostrando HTTPUnit lacune sotto certi aspetti (test di scripting), si vuol consentire l'uso di alternative. L'URL di riferimento per questo pacchetto è http://www.httpunit.org/ oppure presso sourceforge.net;
+	\item \textbf{com.stevesoft.xmlser}: Xmlser è un pacchetto (sempre Open Source) che offre API in grado di \emph{serializzare} e \emph{deserializzare} automaticamente oggetti in XML. XML è un formato di codifica universale dei dati, attualmente in grande diffusione a tutti i livelli applicativi. Nell'ambito di Bellerofonte è impiegato per serializzare gli oggetti che contengono Macro test, in modo da renderli comunque facilmente editabili ed eventualmente importabili. L'url di riferimento è http://www.javaregex.com/;
+	\item \textbf{java.util.regex}: Regex è un pacchetto contenuto in Java 2 Standard Edition (versione 1.4) di Sun. Esso consente e facilita la gestione di espressioni regolari per la ricerca di pattern in un certo testo. In Bellerofonte è stato impiegato all'interno di alcuni Single test per consentire la selezione di un determinato insieme di oggetti in base al loro identificatore. Un suo utilizzo tipico è nella selezione dei link da seguire. Per maggiori informazioni si consiglia di effettuare una ricerca presso il sito http://java.sun.com/;
+	\item \textbf{org.htmlparser}: HTMLParser viene presentato come un'evoluzione di HTTPUnit (dalla quale discende), in quanto offre le stesse funzionalità ma in modo semplificato e maggiormente organizzato. Ad esempio, all'interno di HTMLParser, sono presenti dei ``robot'"' configurabili dall'utente per eseguire determinate operazioni automatiche. Una delle sue qualità migliori (che giustifica peraltro il suo nome) è la facilità con cui consente di estrarre informazioni dal codice HTML. Nel caso di Bellerofonte si è usato per analizzare del semplice testo. Il sito di riferimento è http://htmlparser.sourceforge.net .
+\end{itemize}
+
+\subsection{Identificazione delle classi}
+Come mostra il diagramma UML di figura \ref{fig:diagrammaUML} le principali classi del programma sono nove (il carattere ``\_'"', pur presente nei nomi di alcune classi, è stato omesso in alcune descrizioni per semplicità): 
+\begin{enumerate}
+	\item \textbf{Web\_test}: questa classe è, dal punto di vista dell'utente, la più importante. In essa risiede il metodo ``main'"' che si preoccupa di catturare i parametri in ingresso. In Web test si avvia e si coordina tutto il processo di creazione ed esecuzione dei Macro test. La classe Web test possiede un oggetto della classe Hdd interface, che funge da interfaccia per il caricamento e il salvataggio dei dati sull'hard disk;
+	\item \textbf{Macro\_test}: la classe Macro test è invece quella che identifica e contiene tutte le componenti di un test. Infatti essa ha un vettore di oggetti di classe Single test, un altro vettore di oggetti Report (che in realtà è gestito in modo da contenerne al massimo due), un oggetto di classe TestOption ed un oggetto di classe Report contenente il risultato dell'ultima esecuzione del Macro test. Alla classe Macro test spetta dunque la responsabilità di istanziare i test singoli su richiesta ed eseguirli, leggere le opzioni e rappresentare i risultati delle esecuzioni;
+	\item \textbf{Single\_test}: La classe Single test è l'unica \emph{classe astratta} del programma e serve da modello per tutti i test singoli concreti che devono necessariamente ereditare da lei. La classe Single test possiede infatti i campi ed i metodi comuni ad ogni test singolo, il quale deve specializzarli concretamente affinché possano essere eseguiti. Un Macro test contiene un numero maggiore o uguale a zero di oggetti Single test e nell'eseguirli non distingue tra l'uno e l'altro, eccezion fatta per il particolare test ``FollowLinks'"';
+	\item \textbf{Hdd\_interface}: si è già accennato alla funzione di questa classe. In particolare essa conosce l'indirizzo sull'hard disk dei vari file necessari a Bellerofonte ed è pertanto deputata al reperimento ed al salvataggio delle informazioni. Essa rappresenta per la classe Web test un'astrazione rispetto a tipiche problematiche di codifica e decodifica, di cui si fa carico; 
+	\item \textbf{Report}: la classe Report è usata in ogni test singolo per ``annotare'"' i risultati ottenuti. Ogni report deve essere strutturato e coerente con i report di altre esecuzioni, così da permettere eventuali confronti. Si delega quindi ai report la funzione di formattare e conservare in modo adeguato i risultati di ogni Single test. Un report rimane comunque un oggetto di Macro test, ma viene passato tra i vari test singoli come il ``testimone'"' di una staffetta;
+	\item \textbf{TestOption}: le opzioni rappresentano per il Macro test la definizione dell'ambiente nel quale si dovrà svolgere. Un oggetto di classe TestOption appartiene sempre ad un Macro test e non può essere modificato direttamente dai test singoli. Le opzioni contengono l'URL iniziale, l'abilitazione o meno di cookie e redirect ed in generale ogni opzione configurabile tramite HTTPUnit.	I parametri selezionati nelle opzioni influiscono sulle modalità di lettura e rappresentazione della pagina web in Web page;
+	\item \textbf{Timer}: questa classe era preesistente a Bellerofonte ed è stata importata nel progetto da un corso di laboratorio dell'Università di Berkeley. Essa fornisce ovviamente le funzionalità tipiche di un timer (start, stop, elapsed) per misurare la durata dei Single test e del Macro test nel complesso. Utilizza il timer di sistema ed approssima male intervalli di tempo troppo brevi;
+	\item \textbf{Web\_page}: la classe Web page è stata introdotta per avere, all'interno di Macro test, un unico e coerente riferimento alla pagina web analizzata in un dato momento. Web page contiene un vettore di oggetti in grado di descrivere, raggiungere e manipolare la relativa pagina. Questi oggetti sono normalmente soltanto quelli appartenenti al pacchetto HTTPUnit (WebResponse, WebConversation e ClientProperties) ed occupano nel vettore posizioni predefinite, note ad ogni test singolo. Un test singolo che volesse far uso di oggetti diversi per rappresentare la pagina web, dovrebbe poi memorizzarli sul vettore in modo da non sovrascrivere le locazioni già occupate. Al fine di rendere visibili gli effetti di un test anche a quelli che lo seguono (si pensi ad esempio al riempimento di un modulo), Web page rientra tra gli oggetti che Macro test trasferisce tra un test singolo e l'altro;
+	\item \textbf{Macro test\_recursive}: questa classe è invocata da Macro test dopo l'esecuzione del test singolo ``FollowLinks'"', in quanto si rende necessario ripetere ogni test singolo rimanente in ogni link seguito. In altre parole implementa un \emph{fork} nel cammino, altrimenti sequenziale, dei test singoli eseguiti. 
+\end{enumerate}
+
+\begin{figure}[bp]
+	\begin{center}
+		\includegraphics[width=1.0\textwidth , height =	\textheight]{immagini/diagrammaUML.eps}		
+	\end{center}
+	\caption{Diagramma UML di Bellerofonte}
+	\label{fig:diagrammaUML}
+\end{figure}
+
+\clearpage
+
+\subsection{Analisi dei metodi più significativi}
+Entrando un pò più nel dettaglio si descrivono ora tre importanti metodi appartenenti alle classi presentate nel paragrafo precedente. 
+\begin{itemize}
+	\item \emph{Web test.start}: questo è sicuramente il metodo più generale. Viene invocato dal main sull'oggetto di classe Web test e coordina tutte le azioni principali svolte durante il test. In input prende il vettore di argomenti passati al programma dalla riga di comando. Se manca un argomento necessario al funzionamento, start lancia una console interattiva che richiede all'utente tutti i parametri necessari oppure fa terminare il programma. In base a questi parametri (nome del file delle opzioni, nome del file test e modalità di salvataggio del report) start agisce in modi differenti. Provvede anzitutto a richiedere all'Hdd interface il contenuto del file contenente i test singoli attualmente riconosciuti (ovvero le cui classi sono presenti ed istanziabili). Poi crea un oggetto di classe Macro test e gli assegna il nome del file test ricevuto come parametro. Prosegue col richiedere l'elenco delle opzioni all'oggetto Hdd interface, a cui passa il relativo nome di file. Se il file test letto dall'hard disk ha estensione ``.tst'"' significa che è codificato in XML e rappresenta un Macro test precedentemente eseguito e serializzato. Si può dunque effettuare una deserializzazione ed un ripristino rapido del suo stato, provvedendo solamente alla sovrascrittura delle opzioni (dato che potrebbero essere cambiate dall'ultima esecuzione). Altrimenti, se il file test ha un'altra estensione (``.txt'"'), start capisce che si tratta di un file di testo che rappresenta un Macro test alla prima esecuzione. Provvede dunque a tradurre l'elenco di direttive ricevute in un oggetto Macro test pronto per essere eseguito: imposta le opzioni, legge i nomi dei test singoli che dovranno comporre il Macro test, li crea e glieli aggiunge. Terminata questa fase preparatoria Macro test viene finalmente eseguito. 
+	
+Una volta che ogni Single test è terminato (con vario esito) ed ha aggiunto al report il proprio risultato, start cerca nel terzo parametro (opzionale, passatogli dalla riga di comando o dalla console interattiva), le indicazioni su come trattare l'oggetto Macro test ed il relativo report. Prima di terminare start visualizza il conteggio dei test singoli eseguiti, suddividendoli in base all'esito riportato. Bellerofonte si basa poi su questi conteggi per decidere il proprio valore di ritorno al sistema: 0 nel caso in cui ogni Single test sia stato passato, 1 se si è verificato almeno un fallimento e 2 se si è verificato almeno un errore generale;
+	
+	\item \emph{Macro test.newSingleTest}: questo metodo di Macro test istanzia, a tempo di esecuzione, nuovi oggetti corrispondenti ai test singoli (per esempio CheckTitle), continuando a gestirli tramite la loro classe base: Single test. Viene sfruttato cioè il \emph{polimorfismo},\index{Polimorfismo} una delle caratteristiche principali dei linguaggi orientati agli oggetti. In questo caso ogni test singolo concreto può essere istanziato ed utilizzato al posto della classe base astratta Single test, da cui deriva. Nel far ciò i metodi della classe derivata (concreta) si specializzano, sovrascrivendo i metodi della classe base (setUp ed execute principalmente). Macro test, per poter creare test singoli concreti, deve conoscere i nomi delle rispettive classi. Una volta ottenuti i nomi (leggendo da un apposito file di programma), Macro test crea altrettanti oggetti grazie alla \emph{Reflection} di Java. Se per ogni nome di test è stato possibile creare il Single test concreto richiesto, questo è restituito all'ambiente chiamante correttamente inizializzato e pronto per essere eseguito;
+	
+	\item \emph{Macro test.execute}: l'execute di un Macro test corrisponde all'esecuzione di ogni test singolo presente nel vettore \_tests più varie operazioni di coordinamento. Anzitutto viene creato un nuovo Report, che sarà aggiornato in ogni fase dell'elaborazione. In seguito si fa partire il Timer e si cominciano ad eseguire sequenzialmente i test singoli. Ad ogni test singolo viene passato:
+	
+\begin{itemize}
+	\item il riferimento al Report da aggiornare; 
+	\item un oggetto Web page al quale riferirsi per i test;
+	\item il numero di sequenza del Single test.	
+\end{itemize}
+Una volta terminata questa fase viene fermato il Timer (rilevando il tempo di esecuzione) e viene ritornato all'ambiente chiamante il numero di test passati, falliti e gli eventuali errori generati.		
+\end{itemize}
+
+\subsection{Rassegna dei test base implementati}
+Nella versione base di Bellerofonte sono stati realizzati 22 test singoli. Eccoli descritti brevemente (per ulteriori informazioni ci si può avvalere del capitolo sei e dei documenti inclusi nel pacchetto orbilio.webTest.bellerofonte):
+\begin{enumerate}
+	\item \textbf{AddCookie}: con questo test è possibile definire il valore di un cookie da inviare al server per identificare una sessione;
+	\item \textbf{CheckButtonValue}: controlla se un form ha un certo pulsante (per esempio ``Submit'"') ed eventualmente lo ``clicca'"';
+	\item \textbf{CheckCharacterSet}: controlla il set di caratteri usato in un sito;
+	\item \textbf{CheckForm}: controlla se in una pagina è presente un certo form;
+	\item \textbf{CheckFormAction}: controlla il valore del parametro ``action'"' di un form;
+	\item \textbf{CheckFormContent}: verifica se un form ha un campo con un dato valore;
+	\item \textbf{CheckFormField}: verifica la presenza di un campo in un form;
+	\item \textbf{CheckFormMethod}: controlla il valore del parametro ``method'"' di un form;
+	\item \textbf{CheckImage}: verifica la presenza di un'immagine;
+	\item \textbf{CheckLink}: controlla la presenza di un link e la validità dell'URL associato;
+	\item \textbf{CheckMailLinks}: esamina un link ``mailto'"';
+	\item \textbf{CheckTable}: verifica la presenza di una data tabella;
+	\item \textbf{CheckTableContent}: data una tabella, verifica il contenuto di una sua cella;
+	\item \textbf{CheckTextInPage}: data una parola chiave, la ricerca nel testo contenuto in una pagina;
+	\item \textbf{CheckTitle}: verifica il titolo della pagina;
+	\item \textbf{FollowLinks}: data una stringa od un URL seleziona tutti i link che gli corrispondono e li restituisce a Macro test affinché li possa seguire;
+	\item \textbf{GetFrameContent}: se nella pagina è presente un frame con un dato nome, passa ad esaminarlo;
+	\item \textbf{GetHttpHeader}: riporta i contenuti attuali delle intestazioni nei messaggi HTTP;
+	\item \textbf{ReachAll}: selezionata una profondità di visita ed un elenco di pagine da raggiungere, verifica la loro raggiungibilità effettuando una visita in profondità del sito. Non segue i link esterni;
+	\item \textbf{SetFormContent}: imposta un certo valore in un campo di un form;
+	\item \textbf{SubmitForm}: preme il bottone ``Submit'"' di un form e lo invia al server, aggiornando Web page con la risposta ricevuta;
+	\item \textbf{UploadFileWithForm}: dato un form in cui è prevista questa funzione, effettua un upload di un file.
+\end{enumerate}
+
+%*******************************************************************
+\section{Estendere Bellerofonte}
+Concepire un software statico, difficilmente estendibile, in un settore tanto mutevole quale è il web testing, è un grave errore di valutazione: troppo arduo pensare di racchiudere in un'unica soluzione ogni possibile test effettuabile, tanto più che non si sa cosa dovrà essere testato in futuro. Un software difficilmente estendibile, benché completo e curato sul momento, rischia di avere vita breve, perché scarsamente adattabile alle particolari esigenze dei verificatori. Con Bellerofonte non si ha la presunzione di offrire un prodotto ``finito'"', bensì un ``progetto in continua evoluzione'"', capace di integrare con poco sforzo eventuali nuovi test. 
+
+\subsection{Come aggiungere funzionalità ex-novo}
+Aggiungere semplicemente dei test a quelli già esistenti, senza portare modifiche strutturali o semantiche alle classi di Bellerofonte, dovrebbe risultare un compito relativamente semplice per degli sviluppatori. Disponendo della directory di lavoro di Bellerofonte (figura \ref{fig:fileProgram}), i passi da eseguire sono standard:
+\begin{enumerate}
+	\item anzitutto si deve individuare la libreria adatta alla realizzazione del nuovo test: o si sfrutta solo la libreria di default (HTTPUnit) o se ne deve importare (in aggiunta) una nuova. Se la libreria scelta non è compresa da quelle già utilizzate in precedenti test allora è necessario:	
+\begin{enumerate}
+	\item copiare il relativo file jar nella directory /jars;
+	\item editare il file manifest.mf in /lib aggiungendo nella riga ``Class-Path'"' la scritta ``../jars/'"' + $<$nome Jar aggiunto$>$	
+	\item ricordarsi di aggiungere il nuovo archivio jar nel Path dell'editor usato per scrivere il nuovo test;
+\end{enumerate}
+
+\item una volta selezionata una o più librerie adatte, aprire il file ``Anonymus.java'"' che si trova in /src e salvare subito con altro nome il nuovo test. Anonymus è semplicemente lo ``scheletro'"' di ogni nuovo test singolo e dovrebbe pertanto rimanere tale;
+
+\item rinominare la nuova classe ed il suo costruttore con il nome del nuovo test. \'E importante che ogni classe test resti estensione di Single test ed implementi l'interfaccia ``Serializable'"';
+
+\item viene adesso la fase più complicata. Nella nuova classe test sono individuabili cinque aree personalizzabili. Si deve procedere al loro corretto riempimento evitando di modificare il restante codice, che serve a Bellerofonte per gestire i test singoli a prescindere dalla loro funzione. In un certo senso il programmatore dovrà comportarsi come se stesse sovrascrivendo determinate parti di un'\emph{interfaccia}. Il significato di ogni area è spiegato più dettagliatamente nei documenti ``howTo'"' inclusi nella directory /various. Qualora la funzione di un'area non risultasse chiara è consigliabile l'ispezione del listato di qualche altro Single test già implementato. \\
+Il listato della classe \emph{Anonymus}, così come viene trovata dal programmatore nel momento in cui decide di specializzarla in un nuovo test singolo, è presentato di seguito. Le aree sulle quali si dovrà intervenire sono delimitate da apposite stringhe di commento:
+
+\scriptsize
+\lstset{language=Java}
+\begin{lstlisting}[title={Listato della classe Anonymus.java}, breaklines=true, frame=shadowbox, showspaces=false]
+
+package orbilio.webTest.bellerofonte;
+
+import java.util.Vector;
+import java.io.Serializable; 
+
+//////////////// FOLLOWING CAN CHANGE FROM TEST TO TEST 	
+import java.net.*;
+import java.io.IOException;
+
+// Libraries used
+import com.meterware.httpunit.*;
+//////////////// END OF COMMON CHANGE AREA 
+
+/**
+ * @author Claudio Tortorelli - 2003
+ * 
+ */
+//-----------------------------------------
+
+class Anonymus extends Single_test implements Serializable
+{
+/**
+ * Fields
+ */  
+ 
+//////////////// FOLLOWING CAN CHANGE FROM TEST TO TEST 
+  private String _expectedInput = "";
+//////////////// END OF COMMON CHANGE AREA 	
+ 	 	
+/************************************************
+ * Constructor
+ */
+  public Anonymus()
+  {
+   super();
+  }
+/************************************************
+ * This setUp method reads an ordered list of 
+ * parameters embedded in a Parameters object, some
+ * test options and the single test's number. With
+ * these informations it intializes its objects.
+ *
+ * IN: a vector with parameters specified in 
+ * macro test file and the number of test. 
+ * The vector has at first position the test's
+ * name and the other positions hold the actual parameters	
+ * OUT: void
+ */
+  public void setUp(Vector parameters, int numSingleTest) 
+  { 			
+   _myNumber =  numSingleTest;
+   _myName = (String)parameters.elementAt(0); 
+   _finalResult = "notCheckedYet";
+   _timeOfExecution = "0";
+    		
+//////////////// FOLLOWING CAN CHANGE FROM TEST TO TEST 	
+  //read words from file test txt or xml					
+   _expectedInput = (String)parameters.elementAt(1); 
+//////////////// END OF COMMON CHANGE AREA 
+
+  }
+/************************************************
+ * This method implements the particular execution of
+ * this single test. It take as parameters the 
+ * report and the list of values returned by some
+ * eventual previous tests. It returns its values.
+ *
+ * IN: report for add results, file name target,
+ * vector with results of previous test 
+ * OUT: vector with the results of this test
+ */ 	
+  public void execute(Report rep, Web_page page, String subNum) 
+  {			
+  // strings of header of Single_test	
+    String num = _myNumber + subNum;
+    String target = page.getTarget();
+    String head1 = "TEST: \""+_myName+"\""+" | Url: "+target; 
+    rep.addHeader(head1, num);	       
+  // start timer
+    Timer tim = new Timer();
+    tim.start();		    
+
+//////////////// FOLLOWING CAN CHANGE FROM TEST TO TEST 
+    rep.addResultExpected("Input: " + _expectedInput);		
+//////////////// END OF COMMON CHANGE AREA 
+
+  // get page's state elements, 
+  // if 0 then the page was not loaded correctly
+    Vector pageData = page.getCurrent();			
+    if (pageData.size() != 0)
+    {			
+    
+//////////////// FOLLOWING CAN CHANGE FROM TEST TO TEST 
+/* //test passed to Report									
+ *  rep.addMyResultGood("The file upload has been setted");  	
+ * // don't change: it is used for comparison
+ *  _finalResult = "PASSED"; 
+ *
+ * //test failed to Report									
+ *  rep.addMyResultBad("The file upload has been setted"); 
+ * // don't change: it is used for comparison
+ *  _finalResult = "FAILED"; 
+ */			
+//////////////// END OF COMMON CHANGE AREA
+
+    }
+  // the web page wasn't load correctly
+    else
+    {			
+      rep.addError("Impossible to perform this test");			
+      _finalResult = "ERROR";
+    }
+  // stop timer and set elapsed time		
+    tim.stop();		
+    long oneSec = 1000;
+    _timeOfExecution = tim.elapsed()/oneSec+"."+tim.elapsed();
+    rep.addSecOfExecution(_timeOfExecution);
+  // add to Report the significative datas 		
+    rep.addDataToCompare(_myName, _finalResult, _timeOfExecution);
+  // end of execution 
+    rep.addSeparation();	
+  }		
+} // end of class
+\end{lstlisting}
+\normalsize
+
+\item quando il test realizzato ha complessità elevata si consiglia di realizzare dei metodi privati interni, da richiamare nelle aree sopra descritte. Come esempio si può considerare il metodo \emph{visitDep} del test \emph{ReachAll}. 
+
+Seguendo lo stesso principio, se per realizzare il test si devono implementare svariate classi accessorie, è indicato includerle in un'apposita libreria da inserire assieme agli altri jar nella directory /jars. Anche in questo caso può essere preso come esempio ReachAll, per il quale è stata realizzata la libreria claudiosoft.struct.btree;
+
+\item se, al termine dell'attività di programmazione, il codice Java del nuovo test compila correttamente, si deve procedere all'aggiunta del file al progetto orbilio.bellerofonte. Una volta effettuato un \emph{rebuild} dell'intero progetto, si deve verificare che l'output della compilazione (ovvero i file ``.class'"' tra cui quello del nuovo test) sia stato correttamente inserito in /orbilio/webTest/bellerofonte. \'E in quella directory che Bellerofonte andrà a cercare la definizione del nuovo test invocabile;
+
+\item si procede poi ad editare il file ``TestList.txt'"' contenuto in /webtestfiles/program. Esso contiene un elenco dei nomi di tutti i Single test per i quali esiste una definizione. Per aggiornarlo basta aggiungere in fondo alla lista dei test attualmente riconosciuti, il nome del nuovo test creato. \'E importante che sia rispettata l'esatta sequenza di maiuscole e minuscole;
+
+\item editare anche il file ``TestSynopsis.txt'"' in /webTestFiles/program (e il suo omologo ``.doc'"' in /various) aggiungendo l'esatta segnatura ed una sintetica descrizione del nuovo test. Ciò non è strettamente necessario al funzionamento del software, ma è richiesto per lasciare una minima documentazione sui nuovi test introdotti.
+
+\item eseguire infine lo script batch ``makeJar.bat'"' in /bin, il quale provvede automaticamente ad:
+\begin{itemize}
+	\item aggiornare il file ``Bellerofonte.jar'"' in /lib aggiungendo il nuovo file ``.class'"';
+	\item aggiungere alla variabile di sistema Classpath il nome di eventuali nuovi archivi jar inseriti in /jars.
+\end{itemize}
+\end{enumerate}
+
+\subsection{Possibili sviluppi futuri}
+Attualmente Bellerofonte non dispone di un'adeguata interfaccia grafica (Pegaso) che dovrebbe supportare l'utente durante tutta le fasi di preparazione ed esecuzione del test descritte nel prossimo capitolo. 
+
+Un'altra mancanza che si potrebbe pensare di colmare è l'impossibilità di effettuare test di performance e stress. Essendo però Bellerofonte richiamabile dalla riga di comando, è piuttosto semplice creare uno script esterno che includa una sua esecuzione separata in $n$ \emph{thread} diversi. D'altro canto, Bellerofonte è stato progettato principalmente in funzione di Orbilio, applicazione che attualmente non ha bisogno di simili test. 
+
+Altri aspetti che meriterebbero maggiore attenzione in versioni future di Bellerofonte potrebbero essere:
+\begin{itemize}
+	\item ottimizzazione del disegno e del codice;
+	\item migliore gestione dei report;
+	\item migliore gestione del timer;
+	\item utilizzo più raffinato dell'XML nella definizione dei Macro test;
+	\item inserimento di test più sicuri nell'analisi degli script;
+	\item considerare specifici test di usabilità, quali quelli che verificano l'accessibilità per utenti disabili.
+\end{itemize}

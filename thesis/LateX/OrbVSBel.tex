@@ -1,0 +1,51 @@
+\chapter{Testing di Orbilio con Bellerofonte}
+Parallelo al progetto Orbilio descritto nel capitolo precedente, si è sviluppato Bellerofonte. Essendo Orbilio nato da oggettive necessità di modificare aspetti lacunosi della piattaforma Claroline, si è resa subito palese l'esigenza di garantire uno standard di qualità minimo nelle modifiche introdotte. Non si voleva infatti ripetere l'errore fatto in Claroline, dove numerose aggiunte di funzionalità incoerenti tra loro hanno portato ad una confusione diffusa a tutti i livelli ed a un'usabilità ridotta. 
+
+Bellerofonte è quindi rivolto specialmente ai futuri sviluppatori di Orbilio, i quali, ampliando le funzionalità della piattaforma con nuovi servizi, saranno chiamati a garantirne la correttezza tramite appositi test. 
+
+\spazioVer
+In questa prima versione di Bellerofonte è stata presentata una serie di test singoli i quali, una volta combinati tra loro, possono fornire un'adeguata gamma di test funzionali, regressivi, di caricamento e di interfaccia. Le modalità con cui realizzare tali test sono quelle illustrate nel capitolo 6. 
+
+Sempre nell'ambito di questa tesi è stato realizzato un semplice test che verifica la raggiungibilità di un certo numero di file di Orbilio, una volta terminata la procedura di installazione. Questo test, basato sul test singolo ``ReachAll'"', può dunque considerarsi un primo esempio di Installation test. 
+
+\section{Un semplice esempio di Installation test}
+Orbilio punta ad essere una piattaforma \emph{user-friendly} non solo dal lato dell'utente, ma anche da quello dell'amministratore. \'E una qualità fondamentale di quei software che ambiscono ad uscire dall'ambiente in cui sono stati creati per essere installati ed usati anche da persone non addette. Per questo motivo, tra i vari test che potevano essere realizzati, se ne è privilegiato uno post-installazione, che consentisse ad un amministratore di controllare automaticamente lo stato della piattaforma appena installata (senza però includere obbligatoriamente questa verifica in Orbilio). Al tempo stesso si è voluta mostrare la versatilità di Bellerofonte e la sua capacità di integrarsi con interfacce grafiche esterne. Il risultato ottenuto conferma queste proprietà, ma, come lo stesso Bellerofonte, non punta ad essere definitivo e rimane suscettibile alle future modifiche di Orbilio. 
+
+In questo paragrafo non si scenderà in nessun dettaglio tecnico circa la realizzazione dell'interfaccia grafica che coordina la raccolta dei dati e l'esecuzione del test. Ciò perché questa particolare implementazione non è rilevante per il web testing e non è neppure vincolante ai fini di future interfacce grafiche di Bellerofonte (la già citata Pegaso). La scelta, in questo caso, è caduta su \emph{Swing} di Java per vari motivi:
+\begin{itemize}
+	\item si integra perfettamente con Bellerofonte sotto molti aspetti: quello tecnico e quello della portabilità in primo luogo;
+	\item c'è un'ampia gamma di componenti e di strumenti per il disegno di interfacce già pronti;
+	\item consente di creare un'interfaccia \emph{stand-alone}, che cioè ha bisogno solo della Java Virtual Machine per funzionare. 
+\end{itemize}
+I requisiti quindi coincidono con quelli di Bellerofonte.
+
+L'interfaccia realizzata per l'installation test, che si presenta una volta lanciato il file batch ``TestGUI.bat'"', è mostrata in figura \ref{fig:GUI}
+
+\begin{figure}[bp]
+	\begin{center}
+		\includegraphics[width=1.0\textwidth, height = 9.5cm]{immagini/GUI.eps}		
+	\end{center}			
+	\caption{Interfaccia dell'Installation test}	
+	\label{fig:GUI}
+\end{figure}
+
+L'installation test presume, ovviamente, la disponibilità di Bellerofonte e di Orbilio. \'E dunque mostrato a chi esegue il test un form nel quale dovranno essere inseriti i seguenti dati:
+\begin{enumerate}
+	\item l'URL di Orbilio, ovvero della directory dove è collocato il suo ``index.php'"';
+	\item il path assoluto della root di Bellerofonte, cioè il percorso nel file system che porta alla directory ``claudiosoft.bellerofonte'"';
+	\item l'identificatore di login e la password per accedere ad Orbilio come amministratore.
+\end{enumerate}
+Al di sotto dei campi citati c'è un'area di testo con i file standard di Orbilio (versione 1.0) che Bellerofonte tenterà di raggiungere nel suo test. A questo elenco di file l'amministratore (o più facilmente lo sviluppatore) di Orbilio può aggiungerne altri. Se si volesse rendere permanente questa selezione si dovrebbe invece intervenire sul file di testo ``listFile.txt'"' contenuto nella directory ``files'"' della directory ``claudiosoft.testGUI'"'.
+
+L'interfaccia raccoglie tutti i dati (effettuando anche delle verifiche sulla loro correttezza) e, dopo la pressione del bottone ``Start'"', li rielabora: crea il file di opzioni, i file (usati nei test ``ReachAll'"') contenenti gli URL delle pagine da raggiungere ed il file  con l'elenco dei test singoli (in formato testo).
+
+Tutti i file creati, a parte il report, sono temporanei e vengono cancellati all'uscita dal test.
+
+Al termine della fase preparatoria, se non sono state incontrate difficoltà, viene lanciata l'esecuzione di Bellerofonte in un processo separato. L'output di esecuzione scorrerà nella shell mentre il report verrà visualizzato in una finestra \emph{pop-up} aperta appositamente. In base al valore di uscita del sottoprocesso l'interfaccia si aggiornerà di conseguenza, confermando o smentendo al verificatore il buon funzionamento di Orbilio. 
+
+Il test assemblato dell'interfaccia non fornisce in realtà una prova ``forte'"' della corretta installazione di Orbilio: esso è costituito da due esecuzioni separate del test singolo ``ReachAll'"'; la prima è volta a verificare le pagine di base mentre la seconda viene lanciata all'interno dell'area di amministrazione (per questo servono identificatore e password di amministratore). Dato che il test non interessa le funzionalità ma solo la raggiungibilità delle pagine elencate, ci si deve accontentare di dedurre che ogni link è funzionante e dunque presumibilmente il web server e il database sono ben configurati. Del resto si può ipotizzare che la verifica delle singole componenti sia stata già fatta dagli sviluppatori con appositi test funzionali e di usabilità.
+
+L'interfaccia di questo installation test risulta comunque piuttosto spartana, mancando di facilitazioni quali la possibilità di salvare i report e di selezionare i path con rappresentazioni ad albero del file system. Se si considera però che altri tipi di test potrebbero essere facilmente assemblati sfruttando questa implementazione (con al più poche modifiche), si ha la riprova che Bellerofonte è sufficientemente versatile da essere usato sia tramite \emph{GUI} che tramite riga di comando.
+
+\section{Conclusioni}
+Vi sono ormai molti libri e articoli che riguardano gli argomenti trattati in questa tesi. Malgrado ciò, il testing ed in particolare il web testing rimangono attività sconosciute o marginali tra la maggior parte dei programmatori. Se da una parte è vero che non esiste una metodologia definitiva e completa da applicare, è anche vero che l'arte (o l'intuizione) di evitare errori non viene coltivata in modo sistematico e ``scientifico'"', dando maggior spazio ad altre problematiche. Nel corso di questa tesi si sono illustrati ad alto livello i nodi che gli sviluppatori, i verificatori e gli utenti si trovano a dover sciogliere quando incontrano un bug e quali vantaggi ne possono derivare. Si è poi presentato uno dei tanti possibili strumenti a disposizione per ``sbrogliare'"' questa matassa. La speranza è che lo sviluppo di Orbilio e di Bellerofonte proceda parallelamente, così da garantire correttezza e affidabilità, ma anche una maggiore sensibilità verso la qualità del proprio software.

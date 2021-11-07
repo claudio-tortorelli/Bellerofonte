@@ -1,0 +1,69 @@
+---------------------------- TARGET OPTIONS ----------------------------
+
+// Describe target's protocol and url (what and where will be tested)
+		protocol=http
+		host=127.0.0.1        
+		path= 
+		fileBase=
+
+---------------------------- CLIENT OPTIONS ----------------------------
+
+// Specifies whether the client should accept and send cookies
+		cookie=yes
+		
+// Determines whether the client should automatically follow page redirect requests (status 3xx). By default, this is true in order to simulate normal browser operation. 
+		autoRedirect=yes
+		
+// Specifies whether the client should automatically follow page refresh requests. By default, this is false, so that programs can verify the redirect page presented to users before the browser switches to the new page. Setting this to true can cause an infinite loop on pages that refresh themselves. 
+		autoRefresh=yes
+		
+// If are supported float frame in a page
+		floatFrame=yes
+		
+// Identify who perform the test
+		userAgent=Bellerofonte ver. 1.0
+
+---------------------------- HTTPUNIT OPTIONS ----------------------------
+
+// If that option is selected all following options are ignored. It resets all options to their default values. 
+		useDefaultOptions=no
+	
+// Specifies whether HttpUnit should throw an exception when the content length of a message does not match its actual received length. Defaults to false. 
+		checkHttpMsgLength=no
+	
+// Sets the default character set for pages which do not specify one and for requests created without HTML sources.
+		defaultCharacterSet=
+	
+// Sets the default content type for pages which do not specify one. 
+		defaultContentType=
+	
+// If true, throws an exception when it receives an error status.
+		exceptionThrownOnErrorStatus=yes
+	
+// Determines whether script errors result in exceptions or warning messages.
+		exceptionThrownOnScriptError=yes
+	
+// If true, tells HttpUnit to treat images with alt attributes as though they were the text value of that attribute in all searches and displays.
+		imageTreatedAsAlternativeTxt=no
+	
+// If true, tells HttpUnit to log HTTP headers to system output.
+		loggingHttpHeaders=no
+	
+// If true, text matches in methods is case insensitive.
+		matchingIgnoreCase=no
+	
+// If true, tells HttpUnit to throw an exception on any attempt to set a form parameter to a value which could not be set via the browser.
+		parametersValueValidate=no
+	
+// Enable or disable parsing warnings in Html
+		parserWarnings=no
+	
+// Determines whether a normal POST request will include the character set in the content-type header.
+		postIncludesCharset=no
+	
+// Sets the delay, in milliseconds, before a redirect request is issued.
+		redirectDelay=0
+	
+// Enable or disable scripting in the pages
+		scripting=yes
+

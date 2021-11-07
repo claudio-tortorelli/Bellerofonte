@@ -1,0 +1,3 @@
+FollowLinks||string|STN|
+FollowLinks||string|Video-ricevimento|
+CheckTextInPage|Servizio attivo|

@@ -1,0 +1,31 @@
+\chapter{Breve descrizione di Orbilio}
+In questo capitolo verrà descritta sommariamente l'applicazione web per la quale Bellerofonte è stato ideato e realizzato: Orbilio. 
+
+Orbilio nasce e si sviluppa all'interno del Dipartimento di Sistemi ed Informatica dell'Università di Firenze ed è attualmente seguito da un apposito gruppo di lavoro formato da professori e studenti. 
+
+Esso si propone come strumento di supporto alla didattica e, andando oltre, come piattaforma di \emph{e-learning}, in grado di offrire funzionalità per l'interazione in tempo reale. Prima di Orbilio, il sito web del Dipartimento (all'URL \textbf{if.dsi.unifi.it}) già gestiva una serie di servizi tesi a raccogliere informazioni utili per i professori e fornire un riferimento ai vari corsi per gli studenti. C'era però l'esigenza di uniformare questi servizi in una piattaforma definitiva, che offrisse, per ogni corso universitario, una comune veste grafica ed un'omogenea implementazione funzionale. 
+
+Dopo aver ispezionato varie alternative presenti attualmente nel ramo del supporto alla didattica, è stata scelta come piattaforma di partenza \emph{Claroline}\index{Claroline}, un'applicazione realizzata all'Università Cattolica di Lovanio, in Belgio.
+Claroline presenta alcune evidenti qualità:
+\begin{enumerate}
+	\item è un progetto con licenza Open Source, ovvero permette la modifica e la successiva redistribuzione dei file sorgenti;
+	\item è un software sviluppato sulla base di tre tecnologie molto diffuse e conosciute: il linguaggio PHP, il server Apache ed una base di dati MySQL;
+	\item presenta già tutta una serie di servizi di base disponibili ai professori ed agli studenti: una \emph{home page} separata e personalizzabile per ogni corso, la gestione di gruppi di lavoro, forum e così via.
+\end{enumerate}
+Dopo un certo periodo di prova sul sito del Dipartimento sono però emersi anche i limiti e le lacune di questo software:
+\begin{itemize}
+	\item benché supporti molte lingue diverse nell'interfaccia, la gestione delle traduzioni non è risultata abbastanza precisa;
+	\item il codice sorgente appare caotico e dunque difficile da modificare. Allo sviluppo di Claroline devono aver preso parte, in momenti differenti, persone di varia lingua. Il risultato è una certa ambiguità nelle definizioni, dovuta prevalentemente alle discrepanze linguistiche e stilistiche in commenti, nomi di variabile, campi del database ed altro ancora;
+	\item le modalità di gestione del database subiscono frequenti modifiche. Ciò si ripercuote direttamente sulla complessità degli aggiornamenti da una versione all'altra;
+	\item gli aspetti amministrativi della piattaforma nel suo complesso non sono sufficientemente flessibili e semplici. Non dispongono inoltre di nessun meccanismo in grado di evitare involontari interventi manuali dannosi.
+\end{itemize}
+Sulla base di queste constatazioni è stato deciso dal gruppo di lavoro sopra menzionato di effettuare un \emph{fork} dalla piattaforma Claroline ad una nuova piattaforma: Orbilio. Le modifiche da apportare erano in effetti troppe per essere gestite sempre all'interno del progetto Claroline. Inoltre, alla base di Orbilio, sta la volontà di offrire una vera piattaforma di e-learning, cosa che Claroline non mirava ad essere.
+
+Così in Orbilio sono stati migliorati o aggiunti i seguenti aspetti:
+\begin{itemize}
+	\item eliminazione di alcuni file non più utilizzati in Claroline, ma comunque compresi nel pacchetto. Il risultato è una maggiore snellezza del progetto;
+	\item introduzione di nuove componenti. L'innovazione più importante, primo passo verso la realizzazione di una piattaforma di e-learning, è stata l'aggiunta della funzionalità di \emph{video-ricevimento}, in grado di fornire un contatto diretto tra professore e studenti tramite \emph{web-cam};
+	\item integrata una nuova \emph{procedura di autenticazione}\cite{3.5}, capace di rendere effettiva la corrispondenza tra i reali studenti del corso di laurea e gli studenti registrati ad Orbilio nonché di semplificare le operazioni di gestione;
+	\item migliorato l'\emph{aspetto amministrativo}, con aggiunta di nuove schermate di configurazione guidata e gestione assistita del database.		
+\end{itemize}
+Orbilio punta inoltre ad essere maggiormente usabile ed installabile anche da utenti con scarse conoscenze informatiche. Questo per favorire la sua diffusione anche al di fuori del Dipartimento. Orbilio rimane comunque un progetto Open Source. Per informazioni più approfondite sulle piattaforme di e-learning in generale e su Orbilio in particolare si vedano i documenti \cite{3.3} e \cite{3.4} citati in bibliografia. 

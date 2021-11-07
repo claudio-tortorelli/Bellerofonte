@@ -1,0 +1,262 @@
+\chapter{Il software testing}
+L'argomento sul quale si focalizzerà l'attenzione nello sviluppo della tesi è il web testing, ma è impossibile iniziare a parlarne senza passare attraverso un'introduzione al \emph{software testing}. Alcuni addirittura non vedono neppure una grossa distinzione tra i due tipi di testing ed in effetti il web testing può sicuramente considerarsi una specializzazione del software testing (che merita di essere considerata a parte). Questo capitolo fornirà una descrizione piuttosto generica di ciò che rappresenta oggi il software testing: non solo verifiche empiriche, ma anche e soprattutto strategie, tecniche di programmazione, esperienza, innovazioni tecnologiche, investimenti economici, profonde competenze informatiche ed in generale ogni espediente in grado di controllare la qualità e l'affidabilità del software. Tutto ciò è software testing e di conseguenza anche web testing, il quale comprende inoltre problematiche e necessità proprie delle applicazioni di rete.
+\'E ritenuto quindi un buon approccio all'argomento quello che prende in considerazione il web testing come ``caso particolare'"' di software testing, approfondendo gli aspetti in cui maggiormente si caratterizza. 
+
+\section{Perché c'è bisogno di software testing}
+Nell'introduzione a questa tesi si sono fatti accenni alle necessità dell'informatica moderna ed alle cause dei cosiddetti bug. Va a questo punto spiegato perché le aziende hanno l'obbligo di combattere i bug. In sintesi si possono elencare le seguenti motivazioni:
+\begin{itemize}
+	\item i sistemi e le applicazioni si trovano a gestire dati ed operazioni sempre più critiche, visto il livello di informatizzazione raggiunto in ogni settore;
+	\item ogni errore ed ogni ritardo ha un costo sempre più elevato per le aziende come per gli utenti finali;
+	\item l'immagine di un'azienda è fortemente influenzata dalla qualità dei suoi prodotti (vale per qualsiasi settore produttivo);
+	\item come per altri tipi di tecnologie anche per l'informatica si sta verificando un processo di ``standardizzazione della qualità'"'. Gli utenti, divenuti ormai numerosi, trascorsi i primi anni ``dell'alfabetizzazione'"', si attendono un certo livello qualitativo, al di sotto del quale non sono disposti a scendere.
+\end{itemize}
+Si è citato, tra le altre buone ragioni per applicare il testing, l'elevato costo di ogni bug. Ma quanto incide realmente in termini economici il fenomeno dei bug sul mondo dell'informatica? Secondo stime pubblicate sull'\emph{IBM System Journal} \cite{1.7}, dal 50\% al 70\% delle risorse per lo sviluppo delle applicazioni industriali è destinato oggigiorno a coprire i costi delle varie attività di verifica, testing e debugging. 
+
+Se agli albori dell'informatica correggere un bug era relativamente facile perché bastava intervenire su pochi \emph{mainframe} nei quali si accentravano le attività di tanti terminali, dagli anni '80, con lo sviluppo di pc e portatili isolati, applicare \emph{patch} ed aggiornamenti di correzione è diventato molto più costoso. Il successivo avvento di Internet ha poi aiutato in questo senso, riavvicinando in qualche modo la situazione a quella centralizzata dei mainframe (tramite i \emph{download} via Web). L'aggravio per le aziende produttrici non si è però alleggerito: testare applicazioni complesse come quelle odierne (con interfaccia grafica, basate su eventi, che devono essere compatibili con vari sistemi operativi e che hanno a che fare con hardware disparato ed in continuo aggiornamento) ha un costo molto più alto rispetto al test delle applicazioni di una volta. Gli oneri sostenuti si rivelano essere però quasi sempre ripagati dalla capacità del prodotto di imporsi presso il grande bacino di utenza che oggi è costituito (teoricamente) dall'intera umanità. Il software testing, quale strumento principale nella lotta ai bug, finisce così per assumere un fondamentale ruolo strategico. L'espansione della ``filosofia del testing'"' a tutti i livelli non è però mai stata facile: ha infatti sub\'ito un andamento molto graduale, ha trovato (e sta trovando) opposizione (economica ed ideologica) tra sviluppatori e manager ed è tutt'ora lontana da livelli ottimali.
+
+Benché la letteratura sul software testing sia apparsa già ai tempi dei primi computer, solo quando l'informatica è uscita dallo stretto alveo scientifico-militare per invadere massicciamente anche contesti commerciali, amministrativi ed universitari si è cominciato ad adottare  sistematicamente tecniche di revisione del codice. Alla rivalutazione del testing hanno contribuito fortemente nei decenni passati la nascita di Internet e lo sviluppo di grandi progetti software, ai quali partecipano centinaia di persone con competenze diverse e per intervalli di tempo indefiniti. Internet è stata il veicolo di una vera informatizzazione di massa, ma anche la lente di ingrandimento su tutti i problemi di computazione distribuita, compatibilità hardware/software ed usabilità. D'altra parte l'abbandono di un approccio ``artigianale'"' alla programmazione ha messo in evidenza tutte le difficoltà di coordinazione, correzione e manutenzione dei software moderni in un ambiente di interscambio in continua evoluzione. Il testing è passato così da attività marginale a mezzo indispensabile per garantire la qualità del software e quindi competitività sul mercato.
+
+\section{Definizioni e concetti di base}
+Ci sono poche ma importanti definizioni che serve conoscere prima di procedere. Anzitutto si può ricordare la \emph{tesi di Dijkstra} che è la regola di riferimento di ogni verificatore:
+\index{Dijkstra, tesi di}
+\newtheorem{dijkstra}{Tesi}
+\begin{dijkstra}[di Dijkstra]
+Scopo del testing è rilevare gli errori, non provare l'assenza degli stessi.	
+\end{dijkstra}
+
+Questa tesi può sembrare pessimista, ma è una conseguenza dell'indecidibilità del \emph{problema della fermata}\index{Problema della fermata}, ovvero del fatto che non è possibile decidere a priori se un software terminerà o meno la sua computazione. Infatti se la funzione 
+\begin{displaymath}
+	halt(x) = \left\{ \begin{array}{ll}
+	 1 & \textrm{se $P_{x}(x)$ termina}
+	 \\
+	 0 & \textrm{altrimenti}
+	 \end{array} \right.
+\end{displaymath}
+che stabilisce se un programma $P_{x}$ si arresta (correttamente o meno) con input $x$ fosse computabile, si potrebbe definire anche un'altra funzione totale
+\begin{displaymath}
+	correct(x) = \left\{ \begin{array}{ll}
+	 1 & \textrm{se $halt(x) =$  1 \& non ci sono stati errori}
+	 \\
+	 0 & \textrm{altrimenti}
+	 \end{array} \right.
+\end{displaymath}
+per la correttezza di $P_{x}(x)$. Purtroppo dalla Teoria della Computabilità si sa che $halt$ non è computabile. Quindi, anche ammettendo che $P_{x}$ sia esente da errori, come lo si può dimostrare se il suo tempo di esecuzione non è limitato? La verifica deve avvenire necessariamente in un tempo finito, ma questo tempo può non essere sufficiente al rilevamento di errori. Non è dunque possibile definire un algoritmo generale che consenta di escludere la presenza di errori in un programma. 
+
+L'obiettivo si sposta allora sul trovare test efficaci, ovvero che rilevino la maggioranza degli errori (se ci sono), mentre la \emph{correttezza} di un software è limitata ai soli test effettuati.
+
+\newtheorem{def successo}{Def.}
+\begin{def successo}[Successo]
+Si dice che un test \emph{ha successo} quando rileva un errore.
+\end{def successo}
+\index{Successo nei test}
+
+\newtheorem{def correttezza}[dijkstra]{Def.}
+\begin{def correttezza}[Correttezza]
+Dato un insieme $A$ di test $t_{i}$ per $i=1...n$ si può affermare che un software $S$ è corretto rispetto ad $A$ se nessun $t_{i}(S)$ ha successo.
+\end{def correttezza}
+\index{Correttezza software}
+
+Dal punto di vista logico l'attività di software testing si può scomporre in tre sotto attività:
+\begin{enumerate}
+	\item \emph{verifica}: viene effettuata dai programmatori o dai verificatori prima del rilascio del software (alla verifica corrisponde solitamente la fase di $\alpha$-testing); \index{Verifica}
+	\item \emph{validazione}: la esegue il cliente utilizzando il software, sulla base dei requisiti concordati in fase di analisi del progetto (durante la validazione si colloca in genere il $\beta$-testing); \index{Validazione}
+	\item \emph{debugging}: individuazione e correzione passo per passo degli errori trovati nelle due fasi precedenti.
+\end{enumerate} \index{Debugging}
+La verifica viene a sua volta fatta mediante:
+\begin{itemize}
+	\item \emph{analisi dinamica}, che avviene osservando l'esecuzione del software, tipicamente con strumenti automatici;\index{Analisi dinamica}
+	\item \emph{analisi statica}, che interessa l'analisi del codice, fatta sia manualmente che con strumenti automatici;\index{Analisi statica}
+	\item \emph{analisi mutazionale}, che viene effettuata inserendo di proposito errori nel codice con l'obiettivo di controllare la validità dei test stessi. \index{Analisi mutazionale}
+\end{itemize}
+In questa tesi ci si interesserà particolarmente all'attività di verifica, concentrandosi sull'analisi dinamica. \\
+Gli errori, poi, possono essere classificati come segue:
+\begin{itemize}
+	\item \emph{failure}: è un allontanamento dal comportamento previsto ovvero un malfunzionamento;\index{Failure}
+	\item \emph{fault}: è una precisazione rispetto al failure, in quanto individua l'anomalia interna al programma che si riflette sul malfunzionamento;\index{Fault}
+	\item \emph{bug}: è l'errore vero e proprio ovvero ciò che provoca l'anomalia e può essere logico, funzionale, fisico e così via. 
+\end{itemize}\index{Bug}
+
+Per esempio, sia dato un programma il cui requisito base è la corretta divisione tra due numeri. In seguito alla verifica con vari input si trova che in alcuni casi il programma si blocca e non restituisce la divisione (si verifica quindi un failure). Si individua allora un'anomalia nell'implementazione dell'operazione di divisione (ovvero un fault) ed in seguito ci si accorge che non viene impedita la divisione per zero (trovando dunque il bug).
+
+\newtheorem{def fixed}[dijkstra]{Def.}
+\begin{def fixed}[Fixed]
+Si definisce \emph{fissato} o \emph{fixed} un bug rilevato durante il testing ed in seguito corretto. 
+\end{def fixed}
+\index{Fixed, fissare errori}
+Dal punto di vista del verificatore si può parlare di 
+\begin{itemize}
+	\item \emph{testing black-box}\index{Black-Box testing} o funzionale, in cui partendo dalle specifiche e senza considerare i dettagli implementativi si valutano le reazioni del software in base a varie configurazioni di input (il software è visto come un ``juke box'"' per il quale l'inserimento di un gettone e la pressione di un certo tasto dovrebbero determinare l'ascolto di un dato disco); 
+	\item \emph{testing white-box}\index{White-Box testing} o strutturale, che considera l'implementazione interna del programma e studia i casi di test che la mettano alla prova. Non è sempre possibile effettuare un simile testing se non si è sviluppatori;
+	\item \emph{testing gray-box}\index{Gray-Box testing}, cioè una mescolanza dei due punti di vista precedenti. Sia il black-box che il white-box testing se applicati singolarmente presentano delle lacune: il primo riesce faticosamente a rilevare bug nel flusso dei dati o nel controllo dei domini; il secondo ha invece difficoltà a verificare la compatibilità, l'usabilità e l'interoperabilità con altri software. Il gray-box testing ``consiste in un insieme di metodi e tool derivati dalla conoscenza interna e diretta del software e dell'ambiente di utilizzo, applicati secondo un criterio black-box'"' [Nguyen] \cite{2.2}. 	
+\end{itemize} 
+
+Il testing si classifica inoltre in base alla dimensione dell'oggetto testato. Si ha:
+\begin{itemize}
+	\item \emph{testing in piccolo} se ci si riferisce alla verifica di un singolo componente (o modulo) di un sistema più complesso. Generalmente per questo tipo di verifica è necessario simulare anche l'ambiente col quale il modulo interagisce. Per far ciò si devono costruire almeno altri due moduli: uno \emph{guida} che fornisce gli input ed uno \emph{fittizio} che finge di essere stimolato dagli output del modulo testato. \index{Testing in piccolo}
+	
+	%figura
+
+	\item \emph{testing in grande} se si verifica il sistema nella sua interezza, dopo aver fatto testing in piccolo delle sue componenti. Con questo tipo di testing il sistema complesso può essere assemblato seguendo un approccio \emph{incrementale} (di tipo \emph{top-down} o \emph{bottom-up}) oppure \emph{non incrementale} (anche detto \emph{big bang test}, più caotico e rischioso).
+\end{itemize}\index{Testing in grande}
+
+Infine, per definire la gerarchia e l'ordinamento tra i test, sono usati i seguenti termini:
+\begin{itemize}
+	\item \emph{test case}: rappresenta l'unità logica tra i test. \'E pensato per verificare un singolo specifico comportamento o una caratteristica del software;\index{Test case}
+	\item \emph{test script}: sono istruzioni che descrivono come uno o più test case devono essere eseguiti;\index{Test script}
+	\item \emph{test suite}: è una collezione ordinata di test case e test script da eseguire per verificare un'area logica o fisica complessa di un software;\index{Test suite}
+	\item \emph{test plan}: è un documento di gestione che pianifica lo scheduling dei test, sottolineando i rischi e le priorità.\index{Test plan}
+\end{itemize}
+
+Scendendo in maggior dettaglio si potrebbero adesso elencare le varie classi di software testing (caricamento, sicurezza, regressione e così via), ma si preferisce rimandare la descrizione al capitolo tre, dedicato al web testing, dove queste tipologie si specializzano nell'ambito della rete.
+
+\section{Gli obiettivi del software testing}
+Praticamente ogni programmatore conosce la frustrazione di scoprire che il software da lui prodotto contiene ancora errori, nonostante le molte prove fatte. Anche quando si è praticamente certi del funzionamento di un software, in realtà non è possibile predire il suo comportamento in tutti i contesti in cui sarà utilizzato. Spesso non si può far altro che valutare i casi più ovvi e lasciare che i restanti errori vengano rilevati e comunicati dagli utenti, per poi essere corretti.
+
+Quali sono le possibili cause di un errore? Perché è sfuggito ai controlli? Si possono elencare quattro casi generali che favoriscono l'insorgere di bug:
+\begin{itemize}
+	\item l'utente ha eseguito una parte di codice mai testata;
+	\item l'ordine in cui dichiarazioni ed espressioni sono eseguite non è mai stato provato in un test;
+	\item l'utente ha introdotto una combinazione di valori in input che non era stata testata;
+	\item l'utente si trova ad eseguire il software in un ambiente (sistema operativo, componenti hardware e così via) che non è stato considerato precedentemente.
+\end{itemize}
+
+L'attività di software testing non si pone come obiettivo la verifica di tutte le possibili situazioni critiche, quanto l'organizzazione e la selezione delle metodologie capaci di minimizzare il numero di errori non rilevati come pure il costo dei test. Nel far questo si individuano le funzionalità del software la cui affidabilità è indispensabile per l'utente, si valutano i rischi a cui ci si espone nel non correggere alcuni malfunzionamenti e si cerca di porre un equo limite al tempo necessario per testare un prodotto prima di immetterlo sul mercato.
+
+Nella fase successiva, un ulteriore obiettivo sarà l'adeguata correzione degli errori rilevati, che eviti l'insorgere di nuovi errori o conflitti. 
+
+In generale l'obiettivo del software testing è quello di offrire una valutazione oggettiva della correttezza di un software, sulla quale gli sviluppatori stessi o terze parti possano basarsi. 
+
+\section{Rilevare un bug}
+Certe volte, nell'incontrare un bug viene da chiedersi come è possibile che il programmatore che ha realizzato una certa procedura non se ne sia accorto prima. In realtà rilevare i bug (anche quelli ``vistosi'"') non è banale. Vi sono almeno due giustificazioni per il ``reo'"' programmatore:
+\begin{itemize}
+	\item quella che per un utente può essere una sequenza ovvia e fondamentalmente necessaria di operazioni, agli occhi di un programmatore o di un verificatore (che non conosce tutti i possibili utilizzi del software) è una sequenza senza importanza. Può così aver deciso di escluderla dai test oppure l'esclusione può essere stata casuale ed involontaria. Questa mancanza di cognizione pone l'accento sull'importanza della comunicazione tra utenti e sviluppatori durante tutto l'arco della produzione del software;
+	\item le competenze per effettuare una buona attività di testing non sono per nulla banali. Linguaggi formali, fondamenti della teoria dei grafi e caratteristiche di algoritmi e strutture dati sono conoscenze necessarie per il testing ed al tempo stesso non così comuni tra gli sviluppatori. Anche per utilizzare tool di testing altrui serve una certa perizia, che si consegue solo dopo adeguati corsi di addestramento, molte volte mai realizzati. 
+\end{itemize}
+
+\subsection{Alcune tipiche complicazioni}
+Persino una semplice procedura di poche righe può nascondere insidie non visibili a colpo d'occhio, in grado di trarre in inganno anche gli analisti esperti. Si pensi ad una procedura per cambiare l'orario e la data di sistema, apparentemente semplice da testare: deve restituire l'orario e la data correnti e permettere all'utente di impostare valori aggiornati. Ecco tre aspetti che invece possono complicare la situazione:
+\begin{itemize}
+	\item gli utenti che interagiscono con la procedura sono ``sorprendentemente'"' due: uno è l'utente umano (esplicitamente) e l'altro è il sistema operativo (implicitamente). Non basta verificare le possibili interazioni tra procedura ed utente umano ma occorre anche supporre situazioni fuori dal normale per quel che riguarda le relazioni col sistema operativo. Il clock di sistema funziona bene? Manca la memoria necessaria? Se un altro programma cambia concorrentemente a sua volta l'orario? Cosa accade in questi casi?
+	\item dato che il codice sorgente ha varie strutture di controllo del flusso, è possibile percorrere ogni ramo nel flusso del programma? Per un esempio come quello descritto in precedenza probabilmente sì: le possibili combinazioni \emph{true/false} di ogni controllo sono in numero limitato e così è possibile costruire una \emph{tabella di verità} per tutti i casi verificabili. Ciò nonostante i casi da valutare tendono a crescere esponenzialmente in proporzione al numero di condizioni true/false presenti nel codice. Se $x$ è il numero dei controlli di flusso allora i casi possibili tendono a crescere come $2^{x}$, per cui non è pensabile controllare tutti i casi per un $x$ corrispondente a grandi software. Si deve ricorrere ad una selezione tra i percorsi del flusso. Ma secondo quale criterio?
+	\item il dominio dei valori di input è troppo grande per essere testato per intero. Si consideri quante date, di formato legale ed illegale, può un utente cercare di impostare. Tipicamente si selezionano per il test input significativi o una loro sequenza logica. Nel caso della procedura di modifica della data si potrebbe scegliere di impostare come nuova data ed ora la mezzanotte del 1999 (il famoso ``Millennium Bug'"')\index{Millennium Bug}. Ma chi assicura un buon funzionamento per ogni possibile data inseribile?
+\end{itemize}
+
+Questi ed altri problemi di testing possono ulteriormente complicarsi nelle moderne applicazioni concorrenti, dove le variabili sono collegate logicamente tra loro e le sequenze di eventi verificabili hanno un ordine imprevedibile. Cambia inoltre la difficoltà nel fare un buon testing a seconda che i verificatori abbiano o meno conoscenza diretta del programma da testare (cioè abbiano la possibilità di effettuare sia testing black box che testing white box). 
+
+Una buona attività di testing per la rilevazione di bug, insomma, non si riduce solamente alla creazione ed all'utilizzo di appositi tool di verifica né all'applicazione meccanica di una data metodologia, ma deve comprendere anche tutta una serie di analisi propedeutiche piuttosto lunghe ed impegnative. 
+
+\section{Le cinque fasi operative del software testing}
+
+Al fine di chiarire quali sono le principali problematiche da affrontare nel software testing ed al tempo stesso raggrupparle in classi omogenee da superare sequenzialmente ed in modo iterativo, si definiscono cinque fasi operative:
+\begin{enumerate}
+	\item Modellazione dell'ambiente di lavoro.
+	\item Selezione degli \emph{scenari} di test.
+	\item Esecuzione e valutazione degli scenari.
+	\item Correzione degli errori rilevati.
+	\item Misurazione dei progressi nel testing.
+\end{enumerate}
+
+\subsection{Modellazione dell'ambiente di lavoro}
+L'ambiente nel quale il software si colloca è forse l'aspetto più difficile da considerare nel suo insieme. Chi si appresta a testare un software non può prescindere dal simulare anche il contesto nel quale il software opererà: è ricreando ``artificialmente'"' (quanto meglio si può) le reali condizioni di lavoro del software che si può sperare di individuare i \emph{fault} più comuni. La ricerca di un ambiente idoneo è però complicata da tutti i formati, protocolli ed interfacce diversi disponibili nell'informatica moderna. Si individuano quattro tipi di interfacce di ambiente da selezionare, combinare e testare:
+\begin{itemize}
+	\item le \emph{interfacce umane}, ovvero i possibili meccanismi di input di dati da parte dell'utente umano (dalle tastiere ai mouse, dalle \emph{Graphical User Interface} ai \emph{prompt} di comando); \index{Interfacce umane}
+	\item le \emph{interfacce software}, comunemente chiamate \emph{API} (Application Programming Interface) che sono un tramite tra il software ed il sistema operativo, le basi di dati, le librerie dinamiche e così via; \index{Interfacce software}
+	\item le \emph{interfacce col File System}, ovvero i formati con i quali il software deve comunicare col sistema operativo (tipicamente il formato dei file);\index{Interfacce col File System}
+	\item le \emph{interfacce di comunicazione}, che permettono l'accesso diretto alle svariate periferiche che possono essere in colloquio col software (simili interfacce sono rappresentate da \emph{driver} e \emph{controller}). \index{Interfacce di comunicazione}
+\end{itemize}
+Definire di quali interfacce di ambiente il software farà uso corrisponde a determinare l'ambiente tipico in cui sarà testato. I test dovranno rispondere anche a domande riguardanti effetti prodotti dall'ambiente stesso: la cancellazione di un file condiviso o il \emph{reboot} di una periferica durante un'operazione come influiscono sul comportamento del software testato?
+
+\subsection{Selezione degli scenari di test}
+Dato uno stato iniziale ed un ambiente di lavoro, per \index{Scenario di test}\emph{scenario di test} si intende la configurazione globale degli input con il quale il software sarà eseguito.
+
+La verifica di ogni singolo scenario di test ha un suo costo monetario e richiede del tempo. Si devono stabilire dunque dei criteri che permettano di selezionare gli scenari da testare in maniera intelligente. Solitamente i verificatori puntano sul cosiddetto \emph{criterio di copertura}\index{Criterio di copertura}, dove per copertura ci si riferisce all'esecuzione di ogni linea di codice oppure all'applicazione di ogni evento ammissibile almeno una volta. In particolare per ``esecuzione di linee'"' si intende l'attraversamento di cammini di esecuzione all'interno del codice, mentre ``l'applicazione di eventi ammissibili'"' è in realtà una sequenza di eventi che simulano un utilizzo logico del software. Sfortunatamente, sia i cammini che le sequenze nell'esecuzione di un software possono essere infinite. Ci si riconduce così al problema  della decidibilità solo parziale della correttezza del codice e dunque la scelta del giusto insieme di scenari significativi rimane un compito arduo.
+ 
+Altri approcci per la selezione degli scenari di test possono essere quelli in cui ci si affida al caso oppure a considerazioni statistiche e combinatorie.
+
+Un obiettivo dei verificatori rimane comunque la definizione di un \emph{test data adequacy criteria},\index{Test data adequacy criteria} cioè di un criterio guida che individui l'insieme degli scenari di test appropriati (con input significativi) in relazione al software in oggetto. In genere la determinazione di un tale criterio è pensata per successivi test basati sulla copertura dei cammini o delle sequenze di eventi. Non si deve però dimenticare che il controllo del flusso è solo uno degli aspetti che possono guidare nella scelta degli scenari di test idonei: ad esempio, si possono scegliere anche scenari che mettono alla prova la coerenza di variabili e strutture dati o la complessità di esecuzione.
+
+Un'importante caratteristica degli scenari di test, qualunque sia la finalità a cui sono rivolti, è la \emph{ripetibilità}. \'E ovvio infatti che un test non ripetibile o non deterministico nei suoi risultati non ha molto valore. 
+
+\subsection{Esecuzione e valutazione degli scenari}
+Una volta identificati gli scenari da testare in base al test data adequacy criteria il verificatore deve simularli sul software. \'E in questa fase che entrano in scena i tool di testing automatici \index{Tool di testing automatici} che velocizzano e facilitano l'applicazione dei test, riducendo al tempo stesso le alte probabilità di errore di un analogo test condotto manualmente.
+All'utilizzo di tool per la verifica \emph{run-time} (cioè in esecuzione) del software vanno di solito affiancati anche quelli per un'analisi statica del codice. Gran parte del lavoro è svolto in questo senso dai compilatori e dai \emph{parser}, ma alcune volte è ancora richiesta la noiosa e certosina verifica manuale del codice riga per riga. 
+
+Completata la fase di esecuzione del test, si passa alla più difficile valutazione dei risultati ottenuti. In sostanza il verificatore deve controllare che il test abbia confermato un comportamento del software conforme ai requisiti richiesti. In alcuni casi è un passaggio semplice, perché si conoscono a priori i risultati validi oppure ci si può basare su test precedenti andati a buon fine. In altri casi però questo tipo di comparazione non è fattibile. Si pensi ad un software che restituisce numeri primi molto grandi: non è banale valutare se ogni numero è effettivamente primo o se c'è qualche numero primo che il software non è in grado di riconoscere. 
+
+A queste difficoltà di interpretazione deve solitamente far fronte un \emph{oracolo} umano\index{Oracolo}, specializzato nel dare una misura della bontà dei risultati del test. 
+
+Normalmente un oracolo si affida a due principali tipi di strumenti: i \emph{formalismi descrittivi} ed il codice \emph{embedded} (incastrato) nel codice sorgente, entrambi relativi alle specifiche software da testare. \index{Formalismi descrittivi}Sia modelli formali (grafi, diagrammi degli stati, grammatiche regolari) che informali (metalinguaggi o linguaggi naturali strutturati) sono molto utili per capire se il risultato ottenuto dal test è positivo o negativo perché definiscono chiaramente i requisiti ed il comportamento corretto del software. Numerosi formalismi più o meno astratti sono disponibili per i linguaggi procedurali come per quelli orientati agli oggetti, rendendo la descrizione delle caratteristiche di un software il più possibile non ambigua. \'E importante che un \emph{oracolo} abbia a disposizione tali formalismi perché, a volte, caratteristiche proprie del software non ``catalogate'"' in precedenza, possono essere considerate errori. Inoltre, tramite i formalismi è permessa un'analisi simbolica dei test, astraendo dalle complicate combinazioni di eventi che possono verificarsi nelle odierne applicazioni grafiche. Va però detto che, in alcuni casi, realizzare dei modelli completi è difficile se non proprio inutile, visto che le dimensioni finali del modello finiscono per superare quelle del software (si pensi al fenomeno dell'esplosione degli stati nei diagrammi a stati finiti).
+
+\index{Codice embedded, asserzioni}La seconda metodologia di valutazione a disposizione degli oracoli è l'aggiunta di codice di verifica al codice sorgente vero e proprio. Di questa presenza l'utente non ha percezione. L'oracolo può invece far riferimento a questo codice per avere informazioni a tempo di esecuzione sullo stato interno del software, tramite apposite API o debugger. L'esempio più banale di questa tecnica di analisi sono i comunissimi ``print'"' provvisoriamente sparsi qua e là per restituire informazioni su oggetti e variabili, mentre meccanismi di test ``built-in'"' più evoluti sono le \emph{asserzioni}. 
+
+Una tecnica meno usata che dovrebbe limitare l'impiego di oracoli umani per la valutazione dei test, è quella del \emph{self-testing}.\index{Self-testing} L'utilizzo di apposito codice embedded permette, ad altri software, di effettuare operazioni di comparazione automatica dei risultati del test con tabelle di valori noti e con risultati precedenti. Una variante sul tema è quella in cui si applica automaticamente un processo di \emph{undo} e \emph{redo}: se effettuando tutte le operazioni inverse a quelle svolte dal software testato si torna in uno stato identico a quello precedente il test, il risultato dovrebbe essere corretto. Anche i risultati del self-testing sono però da prendere con cautela perché non tutte le operazioni di test si adattano a questa tecnica. Inoltre, c'è sempre la possibilità che errori presenti sia sul software testato che su quello di self-testing si ``mascherino'"' a vicenda.
+
+In questa fase di esecuzione e valutazione degli scenari di test è quasi sempre utile domandarsi se è il caso di rieseguire anche test precedenti, per controllare che una certa funzionalità sia ancora valida oppure che bug già rilevati siano stati veramente corretti. In questo senso il testing è una verifica della famosa \emph{compatibilità all'indietro}. Questo modo di procedere implica l'esecuzione di appositi \emph{test di regressione} \index{Test di regressione}(analizzati in maggior dettaglio nel capitolo 3), i quali hanno un ruolo molto importante nella verifica del software. Infatti la correzione di un bug può:
+\begin{enumerate}
+	\item fissare il problema al quale era riferita;
+	\item rivelarsi insufficiente alla risoluzione del problema;
+	\item fissare il problema, ma crearne involontariamente di nuovi;
+	\item essere una combinazione dei punti 2 e 3.
+\end{enumerate}
+D'altro canto è proibitivo eseguire ad ogni modifica un numero sempre più elevato di scenari di test precedenti. Così facendo si rubano tempo e risorse ai nuovi scenari volti a testare gli aggiornamenti delle ultime versioni del software. Oltretutto la riapplicazione di vecchi scenari può non coincidere con le priorità di test selezionate nell'attuale test data adequacy criteria.  \'E quindi auspicabile la più stretta collaborazione possibile tra sviluppatori e verificatori al fine di garantire che le correzioni fatte siano adeguate e senza ``effetti collaterali'"'. Solo così i test di regressione possono essere limitati nel numero e risultare al tempo stesso sufficientemente efficaci.
+
+\subsection{Correzione degli errori rilevati}
+Questa fase segue ovviamente la rilevazione dei bug ma non ha in realtà una collocazione precisa all'interno del processo di software testing. Una volta eseguiti dei test con successo (ovvero si sono individuati dei malfunzionamenti) occorre porvi rimedio, ma in base alla tipologia ed alla gravità dei bug si può decidere di intervenire in modi differenti. Ad esempio si potrebbe ritenere un bug così grave da dover riconsiderare completamente l'intera architettura del software, rendendo inutili i test seguenti. Al contrario si potrebbe valutare un bug sostanzialmente non dannoso e dunque rimandare la sua correzione a qualche fase seguente. Inoltre la presenza di $\alpha$ e $\beta$ testing presuppone varie fasi nella correzione degli errori, che possono anche procedere parallelamente. 
+
+In sostanza la correzione dei bug deve rispettare gli esiti dei test ma può essere effettuata in vari momenti del software testing. \'E essenziale saper correggere i bug rilevati al momento opportuno: senza rallentare lo sviluppo ma anche evitando di sprecare risorse in attività fuori luogo. Soprattutto, come già accennato nella sottosezione precedente, è essenziale che ogni correzione sia efficace e definitiva, per non costringere i verificatori a riconsiderare troppi scenari nei test di regressione.
+
+\subsection{Misurazione dei progressi nel testing}
+L'ultima fase del processo (iterativo) di testing è quella del monitoraggio dei risultati. ``A che punto è il testing di questo software?'"'. \'E sempre difficile rispondere a queste domande perché la relazione tra i risultati quantitativi e qualitativi ed i progressi ottenuti non è banale. Il rilevamento di pochi errori può essere segno che il software è di qualità o all'opposto che i test non sono adeguati. Viceversa anche l'aver trovato molti errori gravi non esclude che ve ne siano ancora tanti altri. Di norma, in base al software da testare, si realizzano delle \emph{check list} \index{Check list}di obiettivi da raggiungere, lasciando ai verificatori la responsabilità di considerarli superati. Ad esempio per quanto riguarda la struttura di un software si potrebbero realizzare check list come la seguente:
+\begin{itemize}
+	\item controllare i più comuni errori di programmazione;
+	\item eseguire ogni percorso nel codice almeno una volta;
+	\item inizializzare ed usare ogni struttura dati almeno una volta;
+	\item controllare lo stato delle strutture dati durante l'esecuzione ed al termine del programma.
+\end{itemize}
+
+Un'analoga lista sotto il punto di vista funzionale potrebbe essere:
+\begin{itemize}
+	\item applicare quanti più scenari di test possibile;
+	\item esplorare i vari stati del software;
+	\item eseguire sequenze di azioni che presumibilmente saranno effettuate dagli utenti.
+\end{itemize}
+
+Concludendo questo breve percorso attraverso le cinque fasi operative del software testing si può notare quanto sia importante la stretta collaborazione tra sviluppatori, verificatori ed utenti del software, durante tutto l'arco del processo di sviluppo. Progettare un software avendo già presenti le esigenze di test porta al concetto di \emph{testability}\index{Testability}, o capacità del futuro software di essere facilmente testabile. Programmare dei tool di verifica assieme alle singole procedure aiuta da una parte lo sviluppatore a comprendere meglio i requisiti che il suo codice deve rispettare, dall'altra il verificatore a trovare degli strumenti ad hoc per le sue analisi. Qualità come la testability sono considerate essenziali in metodologie di programmazione relativamente recenti, qual'è, ad esempio, l'\emph{eXtreme Programming} (XP).
+
+\section{eXtreme Programming: il testing come filosofia}
+
+Una delle metodologie di programmazione che si distingue per la capacità di riassumere alcuni aspetti tra i più produttivi ed efficaci nella produzione del software è l'eXtreme Programming (XP). L'XP si colloca tra le metodologie \emph{leggere} (Lightweight o Agile methodologies), le quali predicano sia la flessibilità dei processi di sviluppo che la considerazione del fattore umano quale elemento centrale per lo sviluppo di buon software. Questa filosofia si contrappone alle metodologie pesanti tradizionali che all'opposto, costringendo tutte le fasi della produzione in schemi predefiniti, si distinguono per la rigidità nei cambiamenti delle specifiche e nella definizione dei ruoli. Non si elencheranno adesso tutti i molteplici aspetti dell'XP, ma ci si soffermerà sul software testing, che, all'interno dell'XP, ha un'importanza particolare. Infatti, nell'XP ogni fase della codifica deve essere affiancata da quella di testing per ritenersi completa. Le linee guida proposte sono essenzialmente quattro e ricalcano in gran parte le conclusioni raggiunte al termine delle sezioni precedenti:
+\begin{enumerate}
+	\item \emph{All code must have unit test}: ogni modulo di codice prodotto deve avere un relativo test per verificarlo. Questi test devono essere creati con appositi \emph{unit test framework} (come JUnit) capaci di generare delle \emph{suite di test} automatizzate. Nessun codice può essere integrato in un progetto senza che tali suite siano presenti e disponibili. Questa condotta consente a chiunque la verifica delle modifiche apportate e permette l'esecuzione dei test di regressione senza sforzi aggiuntivi;
+	\item \emph{All code must pass all unit tests before it can relased}: il codice deve ovviamente passare tutti gli unit test presenti prima di essere rilasciato;
+	\item \emph{When a bug is found tests are created}: quando un bug è rilevato devono essere subito creati ed inseriti nel progetto dei test particolari (\emph{acceptance test})\index{Acceptance test} in grado di evidenziarlo anche in futuro. Gli acceptance test sono in genere derivati dalle comunicazioni degli stessi utenti (\emph{user stories}). La presenza degli acceptance test impedisce di aggiungere codice al progetto nell'eventuale falsa convinzione di aver corretto un bug precedente ed al tempo stesso permette un rapporto più diretto tra utenti e sviluppatori;
+	\item \emph{Acceptance test are run often and the score is published}: il cliente deve proporre, oltre alle user stories con le quali descrive come ha incontrato i bug, anche dei possibili scenari di test, che in questo caso sono le configurazioni di utilizzo per lui essenziali al fine di considerare corretti gli errori. A partire da questi scenari si creano gli acceptance test che devono risultare tutti positivi affinché una storia sia considerata ``completata'"'. L'applicazione degli acceptance test dovrebbe essere ripetuta nel tempo e per quanto possibile automatizzata. I risultati dei test dovrebbero essere poi pubblicizzati sia tra gli sviluppatori che presso gli utenti.
+\end{enumerate}
+Si potrebbe aggiungere molto su questa metodologia di programmazione che per alcuni sviluppatori è quasi una disciplina, ma in questo contesto ci si limita ad evidenziare la sua capacità di conciliare l'esigenza di software di qualità con le leggi della produzione.
+
+\section{ROC: se i bug sono considerati inevitabili}
+Il punto di vista dell'XP è sicuramente valido ed è in perfetta sintonia con quanto affermato nelle precedenti sezioni di questo capitolo. Ciò nonostante evitare quanto più possibile di produrre software errato non è l'unico approccio al problema ed in certi casi neanche la via migliore. Infatti, come si è dimostrato, la presenza di bug nel software è praticamente inevitabile e l'attività di testing, per quanto efficace, è uno strumento limitato. A queste constatazioni teoriche se ne possono aggiungere altre derivate dalla realtà: un recente sondaggio del settimanale americano Informationweek \cite{1.9} tra 800 manager responsabili di altrettante aziende di business-technology ha messo in evidenza che:
+\begin{itemize}
+	\item nel 2001 il 97\% di loro ha avuto danni (ritardi, perdite di dati e così via) derivati da bug nel software utilizzato;	
+	\item i principali ``colpevoli'"' sono compresi nelle tipologie di software maggiormente studiate ed usate: sistemi operativi, applicazioni da ufficio (word processor, fogli di calcolo,\ldots), tool di sviluppo;
+	\item secondo il 62\% dei manager le aziende produttrici non stanno svolgendo una buona attività di testing per evitare l'insorgere di bug;
+	\item solo il 5\% si ritiene pienamente soddisfatto dal software commerciale di testing provato, percentuale che sale ad un misero 15\% quando il software è realizzato appositamente per una specifica azienda.	
+\end{itemize}
+Tutto ciò nonostante l'impegno nella produzione di software valido. Simili dati non confortano chi scommette sul testing, anzi, fanno apparire ancora di più la caccia ai bug una ``lotta contro i mulini a vento'"'. In realtà, quanto detto sull'utilità del testing rimane valido, ma alcuni stanno iniziando a considerare una via parallela nella ricerca di software bug-free. Alla Stanford University ed alla California University un gruppo di ricercatori coordinato da Armando Fox e David Patterson sta mettendo a punto una nuova metodologia di programmazione chiamata \emph{ROC} (Recovery-Oriented Computing), \cite{3.1} basata sul recupero veloce da situazioni di errore, partendo dal presupposto che gli errori saranno comunque presenti. 
+
+Attualmente la complessità dell'hardware e del software (specie quello di rete) cresce esponenzialmente e l'attività di testing non riesce a starle dietro. L'ottimizzazione del codice e la ricerca di bug poi interessa essenzialmente gli errori interni al software ma tende a trascurare la prima causa di errore, quella umana, dovuta essenzialmente a scarsa usabilità. Nel ROC l'obiettivo diventa la ricerca di un rapido (e ``dolce'"') recupero delle funzionalità interrotte in seguito ad un bug. Infatti, per molte applicazioni di rete (e non solo), ridurre il tempo di inattività è più significativo che minimizzare la frequenza di errori, in modo da non dare all'utente percezione che qualche cosa stia andando storto.\\
+Patterson e Fox indicano per il ROC quattro principi guida:
+\begin{enumerate}
+	\item consentire un rapido recupero (riavvio) del singolo modulo (o insieme di moduli) in errore, evitando nella maggioranza dei casi di azzerare l'intero sistema o l'applicazione, con conseguente perdita di tempo e dati;
+	\item identificare chiaramente il bug che ha provocato un errore;
+	\item rendere disponibile per ogni operazione possibile una funzione di \emph{undo} capace di riportare il sistema o l'applicazione ad uno stato antecedente l'insorgere del bug;
+	\item applicare in modo più organizzato e costruttivo l'analisi mutazionale, ovvero l'inserimento volontario di errori nel software, al fine di valutare l'efficacia dei test che dovrebbero individuare i bug ma anche di scoprire se il software li sa gestire come ci si attende. 
+\end{enumerate}
+
+In concreto il team di ricercatori sta cercando di raggiungere i suoi obiettivi attraverso un'adeguata programmazione modulare, tool automatici di monitoraggio dinamico e statistico, software di testing e \emph{benchmarking} in grado di evidenziare come tali accorgimenti influiscano in modo sostanziale sui rendimenti di certe applicazioni. 
+
+Sicuramente, come implicitamente affermano gli stessi Fox e Patterson, il testing rimarrà un caposaldo del buon sviluppo software, ma non può risolvere il problema dei bug da solo (ed i dati lo dimostrano). Affiancargli metodologie come il ROC permette di considerare finalmente entrambe le  facce della stessa medaglia: oltre a combattere i bug se ne alleviano anche gli effetti, con indubbio vantaggio per l'utente, gli operatori e la qualità del software in generale. 
+
+\section{Conclusioni}
+Come si è tentato di dimostrare in questo excursus sul mondo del software testing, per quanto le tecniche siano complete ed elaborate, l'attività del verificatore continua ad avere un'anima ``estrosa'"', fatta di intuizione ed esperienza, che va al di là di tante euristiche. \'E in ogni caso insospettabilmente complessa e destinata quindi a personale adeguatamente istruito su queste problematiche. 
+
