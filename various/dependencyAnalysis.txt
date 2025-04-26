@@ -1,0 +1,47 @@
+Analisi dipendenze del pacchetto claudiosoft.webtest.bellerofonte con jDepend
+
+(Bellerofonte ver. 0.83)
+
+- 	Bellerofonte presenta 29 classi concrete e 1 astratta;
+
+- 	l'indice di afferenza, cioè quanti altri pacchetti dipendono da Bellerofonte è 0.
+	Potrebbe diventare almeno 1 in caso si fornisse Bellerofonte di interfaccia grafica	
+	
+- 	l'indice di efferenza, cioè da quanti altri pacchetti Bellerofonte dipende è 11;
+	Questo è spiegabile col fatto che Bellerofonte sfrutta altre librerie per i propri test
+	e si propone come strumento plug-in. Di conseguenza tende ad essere altamente 
+	sensibile alle variazioni di queste librerie. Si suppone però che per i test implementati
+	sia sempre inclusa nell'installazione di Bellerofonte la relativa libreria, onde evitare
+	possibili incompatibilità tra test pre-esistenti e nuove versioni delle librerie alle quali
+	si riferiscono;
+	
+-	l'indice di astrazione delle classi (rapporto tra classi astratte e classi totali) è 0,03. 
+	Infatti nel pacchetto solo Single_test è astratta: i suoi metodi base devono essere
+	reimplementati da qualsiasi test concreto per ottenere la compatibilità di quest'ultimo
+	col meccanismo plug-in di Bellerofonte. Bellerofonte si aspetta la presenza dei metodi
+	e dei campi di Single_test in ogni test concreto;
+	
+- 	l'indice di instabilità (rapporto tra i pacchetti efferenti e il totale delle relazioni con gli
+	altri pacchetti) è 1. Si può interpretare come una misura della sensibilità di Bellerofonte
+	alle variazioni dei pacchetti da cui dipende. Bellerofonte come già detto è molto dipendente
+	da altri pacchetti ma si può far fronte a questa possibile fonte di incompatibilità interne
+	con un'accurata politica di selezione e inclusione delle librerie adatte, che preveda verifiche
+	di compatibilità all'indietro;
+	
+-	l'indice di bilancio tra astrazione e stabilità effettua la somma astrazione + stabilità 
+	(stabilità = 1 - indice di instabilità). Idealmente questo indice dovrebbe mantenersi intorno al valore medio 1.
+	I casi limite sono quando si ha completa astrazione e stabilità (implica molte funzionalità da reimplementare ma poche
+	dipendenze da altri pacchetti) oppure completa concretezza e instabilità (implica nessuna
+	funzionalità da reimplementare ma alta dipendenza da variazioni esterne).	
+	Nel primo caso l'indice è 2 nel secondo è 0 (modello framework).
+	Bellerofonte ha indice 0,03 e si avvicina molto al primo caso, con bassa astrazione (0,03) e molta instabilità (1). 
+ 	Si è nel caso in cui la concretezza implica poche funzionalità preesistenti da reimplementare 
+	per aggiungere test (a prescindere dalla complessità del test stesso) ma queste funzionalità sono
+	ampiamente dipendenti dalle variazioni dei pacchetti efferenti. Questo indice rispecchia la filosofia plug-in
+	di Bellerofonte: non si vuol far gravare più di tanto sul programmatore l'aggiunta di nuovi test (il programmatore
+	si deve impegnare solo nella realizzazione del test e non curarsi di come questo viene gestito da Bellerofonte)
+	ma è comunque compito di aggiunge funzionalità verificare che le librerie su cui si basa non subiscano variazioni
+	tali da non permettere l'utilizzo di Bellerofonte;
+	
+-	Cicli: si evidenzia come all'interno di Bellerofonte non esistano dipendenze cicliche tra le classi. 
+
